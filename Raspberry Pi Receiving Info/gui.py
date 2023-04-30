@@ -1,5 +1,6 @@
 import pygame
 from time import sleep
+from Classes import *
 # initialize Pygame
 pygame.init()
 
@@ -91,6 +92,8 @@ class GUI:
             # update the screen so stuff is actually on it
             pygame.display.flip()
 
+
+
 # currently only works for changing the function surface, not the argument
     def change_function_text(self, dictionary):
             
@@ -110,10 +113,7 @@ class GUI:
             # updates the display
             pygame.display.flip()
 
-    # def change_text(self, AR_value):
-        # # use this to change a specific text whether it be based on an AR value and interpreting that
-        # # into a function to actually put on the screen or not
-        # pass
+
 
     def run(self):
 
