@@ -52,9 +52,9 @@ class GUI:
                             23: "Read",
                             19: "Dist"}
 
-        self.number_blocks = ["Forward", "Reverse", "Turn Right", "Turn Left", "For Loop"]
+        self.number_blocks = [Forward(), Reverse(), TurnRight(), TurnLeft(), ForLoop()]
 
-        self.conditional_blocks = ["While Loop", "If Statement"]
+        self.conditional_blocks = [WhileLoop(), IfStatement()]
 
         self.line_number = 0
 
