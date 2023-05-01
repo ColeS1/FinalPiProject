@@ -206,6 +206,7 @@ class GUI:
         elif self.list_of_dicts[self.line_number]["function"] in self.conditional_blocks:
             pass
 
+
     def event_handling(self):
          for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -241,9 +242,9 @@ class GUI:
         # actually puts everything on the screen
         self.display_text()
 
-        # # makes it so GPIO pins can be used
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(self.pins, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+        # makes it so GPIO pins can be used
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.pins, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
         line_number = 0
 
