@@ -6,6 +6,8 @@ pygame.init()
 # define the window dimensions
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
+ON = True
+OFF = False
 
 
 class GUI:
@@ -27,6 +29,26 @@ class GUI:
         # creates surfaces to be used
         self.create_surfaces()
 
+        # pins for buttons
+        self.pins = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
+
+        # the values associated with each pin
+        self.button_vals = {17: "1",
+                            16: "2",
+                            13: "3",
+                            6: "4",
+                            5:"5",
+                            4: "6",
+                            26: "7",
+                            25: "8",
+                            24: "9",
+                            22: "<",
+                            21: "0",
+                            20: ">",
+                            27: "Run",
+                            12: "Lock",
+                            23: "Read",
+                            19: "Dist"}
 
     def create_list(self):
         list_of_dicts = []
@@ -46,7 +68,9 @@ class GUI:
                                   "argument_surface": None,
                                   "argument_rect": None,
                                   "function": "cat",# (supposed to be a function, perhaps a class)
-                                  "argument": "dog"})
+                                  "argument": "dog",
+                                  "previous_state": OFF,
+                                  "current_state": OFF})
 
         return list_of_dicts
 
@@ -92,6 +116,12 @@ class GUI:
             line["argument_rect"].center = (WINDOW_WIDTH // 1.5, (i + 1) * 50 - 20)
 
 
+    def change_text(self):
+                self.delete_text()
+                self.create_surfaces()
+                self.display_text()
+
+
     def function_checking(self, analog_list): # iterates through the analog value list, and assigns
         # a function to the item in the list of dictionaries that was created at the beginning
         # with the same index. this works because there are 12 inputs for analog values, and also
@@ -101,34 +131,48 @@ class GUI:
             if analog_value > 0:
                 if analog_value in range(165, 190):
                     self.list_of_dicts[i]["function"] = Forward()
+                    self.list_of_dicts[i]["current_state"] = ON
 
 
                 elif analog_value in range(83, 100):
                     self.list_of_dicts[i]["function"] = Reverse()
+                    self.list_of_dicts[i]["current_state"] = ON
 
 
                 elif analog_value in range(825, 850):
                     self.list_of_dicts[i]["function"] = TurnRight()
+                    self.list_of_dicts[i]["current_state"] = ON
 
 
                 elif analog_value in range(500, 520):
                     self.list_of_dicts[i]["function"] = TurnLeft()
+                    self.list_of_dicts[i]["current_state"] = ON
 
 
                 elif analog_value in range(65, 80):
                     self.list_of_dicts[i]["function"] = ForLoop()
+                    self.list_of_dicts[i]["current_state"] = ON
 
 
                 elif analog_value in range(140, 160):
                     self.list_of_dicts[i]["function"] = WhileLoop()
+                    self.list_of_dicts[i]["current_state"] = ON
 
 
                 elif analog_value in range(330, 350):
                     self.list_of_dicts[i]["function"] = IfStatement()
+                    self.list_of_dicts[i]["current_state"] = ON
 
 
             else:
                 self.list_of_dicts[i]["function"] =  None
+                self.list_of_dicts[i]["current_state"] = OFF
+
+
+            if self.list_of_dicts[i]["current_state"] != self.list_of_dicts[i]["previous_state"]:
+                self.change_text()
+                self.list_of_dicts[i]["previous_state"] = self.list_of_dicts[i]["current_state"]
+
 
     def argument_setting(self):
         pass
@@ -147,34 +191,51 @@ class GUI:
 
     def run(self):
         tempList = [0, 90, 0, 170, 294, 982, 235, 546, 365, 464, 264, 0]
+        tempList2 = [0, 90, 0, 170, 294, 982, 235, 546, 365, 464, 264, 90]
         running = True
         locked = False
+        HIGH = True
 
+        # creates surfaces to be put on the screen
         self.create_surfaces()
+
+        # centers each surface's position at their designated spots
         self.setup_text()
+
+        # actually puts everything on the screen
         self.display_text()
+
+        # # makes it so GPIO pins can be used
+        # GPIO.setmode(GPIO.BCM)
+        # GPIO.setup(self.pins, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+
+        variable = 0
 
         while running:
             for event in pygame.event.get():
-                ################
-                # have functionality right here for if a button is pressed ? maybe arrow keys for reading
-                # down the lines????
                 if event.type == pygame.QUIT:
                     running = False
 
+                # read based on variable
                 elif event.type == pygame.KEYDOWN:
-                    self.delete_text()
-                    self.function_checking(tempList)
-                    self.create_surfaces()
-                    self.display_text()
+                    self.function_checking(tempList2)
                 
-                elif event.type == pygame.KEYUP:
-                    locked = True
-            
-            if locked == True:
-                pass
-                
+#             if GPIO.input(12) == HIGH:
+#                 locked = True
 
+# # argument checking
+#             while locked == True:
+#                 for pin in self.pins:
+#                         if GPIO.input(pin) == HIGH:
+#                             self.create_surfaces()
+#                             self.display_text()
+#                             # use this (self.button_vals[i]) to configure arguments
+#                             sleep(0.2)
+
+#                 if GPIO.input(12) == HIGH:
+#                     locked = False
+
+            self.function_checking(tempList)
 
         # quit Pygame
         pygame.quit()
