@@ -1,6 +1,7 @@
 import pygame
 from Classes import *
 from time import sleep
+import RPi.GPIO as GPIO
 # initialize Pygame
 pygame.init()
 
