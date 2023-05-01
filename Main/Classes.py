@@ -1,12 +1,29 @@
-class Forward:
+class Block:
+    buttons =  {17: "1",
+                16: "2",
+                13: "3",
+                6: "4",
+                5:"5",
+                4: "6",
+                26: "7",
+                25: "8",
+                24: "9",
+                21: "0",
+                27: "Run",
+                12: "Lock",
+                23: "Read",
+                19: "Dist"}
 
-    def __init__(self):
+
+class Forward(Block):
+
+    def __init__ (self):
         pass
 
     def __str__(self):
         return "Forward"
 
-class Reverse:
+class Reverse(Block):
 
     def __init__(self):
         pass
@@ -14,7 +31,7 @@ class Reverse:
     def __str__(self):
         return "Reverse"
 
-class TurnRight:
+class TurnRight(Block):
 
     def __init__(self):
         pass
@@ -22,8 +39,8 @@ class TurnRight:
     def __str__(self):
         return "Turn Right"
 
-class TurnLeft:
-
+class TurnLeft(Block):
+    
     def __init__(self):
         pass
 
@@ -38,7 +55,7 @@ class WhileLoop:
     def __str__(self):
         return "While Loop"
 
-class ForLoop:
+class ForLoop(Block):
 
     def __init__(self):
         pass

@@ -1,5 +1,6 @@
 import pygame
 from Classes import *
+from time import sleep
 # initialize Pygame
 pygame.init()
 
@@ -49,6 +50,13 @@ class GUI:
                             12: "Lock",
                             23: "Read",
                             19: "Dist"}
+
+        self.number_blocks = ["Forward", "Reverse", "Turn Right", "Turn Left", "For Loop"]
+
+        self.conditional_blocks = ["While Loop", "If Statement"]
+
+        self.line_number = 0
+
 
     def create_list(self):
         list_of_dicts = []
@@ -122,6 +130,17 @@ class GUI:
                 self.display_text()
 
 
+    def delete_text(self):
+        for dict in self.list_of_dicts:
+            dict["function_surface"].fill("black")
+            dict["argument_surface"].fill("black")
+
+            self.screen.blit(dict["function_surface"], dict["function_rect"])
+            self.screen.blit(dict["function_surface"], dict["function_rect"])
+
+        pygame.display.flip()
+
+
     def function_checking(self, analog_list): # iterates through the analog value list, and assigns
         # a function to the item in the list of dictionaries that was created at the beginning
         # with the same index. this works because there are 12 inputs for analog values, and also
@@ -166,6 +185,7 @@ class GUI:
 
             else:
                 self.list_of_dicts[i]["function"] =  None
+                self.list_of_dicts[i]["argument"] = ""
                 self.list_of_dicts[i]["current_state"] = OFF
 
 
@@ -174,20 +194,35 @@ class GUI:
                 self.list_of_dicts[i]["previous_state"] = self.list_of_dicts[i]["current_state"]
 
 
-    def argument_setting(self):
-        pass
+    def argument_setting(self, button):
+        # checks if the function on the line that we are on is one of the functions that only deals
+        # with numerical arguments, excluding conditionals and distance
+        if self.list_of_dicts[self.line_number]["function"] in self.number_blocks:
+             self.list_of_dicts[self.line_number]["argument"] = f"{button} sec"
+        
+        # runs if the function is not one of them, but is also not "None" so that None won't ever 
+        # be able to have arguments set for it. basically there has to be a function to set arguments
+        elif self.list_of_dicts[self.line_number]["function"] in self.conditional_blocks:
+            pass
 
+    def event_handling(self):
+         for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
 
-    def delete_text(self):
-        for dict in self.list_of_dicts:
-            dict["function_surface"].fill("black")
-            dict["argument_surface"].fill("black")
+                # read based on variable
+                elif event.type == pygame.KEYDOWN:
+                    if self.line_number == 0:
+                         self.line_number = 11
+                    else:
+                        self.line_number -= 1
 
-            self.screen.blit(dict["function_surface"], dict["function_rect"])
-            self.screen.blit(dict["function_surface"], dict["function_rect"])
+                elif event.type == pygame.KEYUP:
+                    if self.line_number == 11:
+                         self.line_number = 0
 
-        pygame.display.flip()
-
+                    else:
+                        self.line_number += 1
 
     def run(self):
         tempList = [0, 90, 0, 170, 294, 982, 235, 546, 365, 464, 264, 0]
@@ -209,32 +244,32 @@ class GUI:
         # GPIO.setmode(GPIO.BCM)
         # GPIO.setup(self.pins, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
-        variable = 0
+        line_number = 0
 
         while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+            # handles events
+            self.event_handling()
+            
+            # checks if the locked button is pressed, resets line number to 0
+            if GPIO.input(12) == HIGH:
+                locked = True
+                self.line_number = 0
 
-                # read based on variable
-                elif event.type == pygame.KEYDOWN:
-                    self.function_checking(tempList2)
-                
-#             if GPIO.input(12) == HIGH:
-#                 locked = True
 
-# # argument checking
-#             while locked == True:
-#                 for pin in self.pins:
-#                         if GPIO.input(pin) == HIGH:
-#                             self.create_surfaces()
-#                             self.display_text()
-#                             # use this (self.button_vals[i]) to configure arguments
-#                             sleep(0.2)
+            # if locked button was pressed, will stay in "locked" mode until its pressed again
+            while locked == True:
+                self.event_handling()
+                for pin in self.pins:
+                        if GPIO.input(pin) == HIGH:
+                            self.argument_setting(self.button_val[pin])
+                            self.change_text()
+                            sleep(0.2)
 
-#                 if GPIO.input(12) == HIGH:
-#                     locked = False
+                # checks if locked button is pressed again, breaks loop if it is
+                if GPIO.input(12) == HIGH:
+                    locked = False
 
+            # checks and sees what blocks are on the rack based on a list of analog values
             self.function_checking(tempList)
 
         # quit Pygame
