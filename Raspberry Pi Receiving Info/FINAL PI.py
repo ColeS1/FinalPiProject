@@ -1,6 +1,6 @@
 import serial
-ser = serial.Serial('/dev/ttyACM0', 19200)  # open serial port
-ser2 = serial.Serial('/dev/ttyACM1', 19200)
+ser = serial.Serial('/dev/ttyACM2', 19200)  # open serial port
+ser2 = serial.Serial('/dev/ttyACM3', 19200)
 while True:
     try:
         data = ser.readline().decode().strip()  # read line of text from serial port
