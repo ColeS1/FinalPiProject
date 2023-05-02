@@ -249,7 +249,7 @@ class GUI:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pins, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
-        line_number = 0
+        self.line_number = 0
 
         while (RUNNING):
             # handles events
