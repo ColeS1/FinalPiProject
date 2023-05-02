@@ -12,8 +12,8 @@ class Block(ABC):
         # do something where for loop will be a certain color, then we can put in the constructor for the Block class the color of the block)
 
     @abstractmethod
-    def code_generator(self, argument1= None, argument2 = None): #To make sure all of the classes have a way to allow this to basically make it into code based on the arguments
-                                                                 #that will be given.
+    def code_generator(self, arguments: list): #To make sure all of the classes have a way to allow this to basically make it into code based on the arguments
+                                               #that will be given.
 
         raise NotImplementedError
     
