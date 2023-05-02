@@ -266,6 +266,12 @@ from pygame.locals import (
     K_SPACE,
 )
 
+buttons = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(buttons, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+
 while (RUNNING):
     # Look through all the events that happened in the last frame to see
     # if the user tried to exit.
