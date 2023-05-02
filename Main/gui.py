@@ -52,10 +52,13 @@ class GUI:
                             23: "Read",
                             19: "Dist"}
 
-        self.number_blocks = ["Forward", "Reverse", "Turn Right", "Turn Left", "For Loop"]
+        # lists used for argument comparison, used to check which function an argument is being set
+        # for because functions in number_blocks only take in numerical arguments whereas 
+        # conditional_blocks take in a distance, equality sign, and a numerical value.
+        self.number_blocks = [Forward(), Reverse(), TurnRight(), TurnLeft(), ForLoop()]
+        self.conditional_blocks = [WhileLoop(), IfStatement()]
 
-        self.conditional_blocks = ["While Loop", "If Statement"]
-
+        # used to refer to what line we are on in the code for argument setting and reading out the code
         self.line_number = 0
 
 
