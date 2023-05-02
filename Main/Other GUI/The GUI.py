@@ -123,6 +123,7 @@ class Arguments():
     def __init__ (self, line_number, function_name, list_of_arguments: list):
 
         self.argument_location_name = f"Argument {line_number}"
+        self.line_number = f"Line {line_number}"
         self.function_name = function_name
         self.arguments = list_of_arguments
         self.string_of_arguments = "No Arguments"
@@ -159,7 +160,7 @@ class Arguments():
                 else: 
                     
                     engine = pyttsx3.init()
-                    VALUE_TOO_HIGH = f"Error on {self.line}. Numbers cannot exceed must stay between 0 and 99. Erasing all arguments..."
+                    VALUE_TOO_HIGH = f"Error on {self.line_number}. Numbers cannot exceed must stay between 0 and 99. Erasing all arguments..."
                     engine.say(VALUE_TOO_HIGH)
                     engine.runAndWait()
                     self.arguments = []
@@ -168,7 +169,7 @@ class Arguments():
             except ValueError:
 
                 engine = pyttsx3.init()
-                WRONG_ARGUMENT = f"Error on {self.line}. Please put in only numbers for {self.function_arguments}. Erasing all arguments..."
+                WRONG_ARGUMENT = f"Error on {self.line_number}. Please put in only numbers for {self.function_arguments}. Erasing all arguments..."
                 engine.say(WRONG_ARGUMENT)
                 engine.runAndWait()
                 self.arguments = []
@@ -178,7 +179,7 @@ class Arguments():
             if len(self.arguments) not in range(3, 5):
 
                 engine = pyttsx3.init()
-                TOO_MANY_ARGUMENTS = f"Error on {self.line}. Too many arguments entered for {self.function_name}. Erasing all arguments..."
+                TOO_MANY_ARGUMENTS = f"Error on {self.line_number}. Too many arguments entered for {self.function_name}. Erasing all arguments..."
                 engine.say(TOO_MANY_ARGUMENTS)
                 engine.runAndWait()
                 self.arguments = []
@@ -195,7 +196,7 @@ class Arguments():
                         else:
 
                             engine = pyttsx3.init()
-                            INVALID_ARGUMENTS = f"Error on {self.line}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
+                            INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
                             engine.runAndWait()
                             self.arguments = []
@@ -204,7 +205,7 @@ class Arguments():
                     except ValueError:
 
                         engine = pyttsx3.init()
-                        NUM_NOT_NUM = f"Error on {self.line}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
+                        NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
                         engine.say(NUM_NOT_NUM)
                         engine.runAndWait()
                         self.arguments = []
@@ -220,7 +221,7 @@ class Arguments():
                         else:
 
                             engine = pyttsx3.init()
-                            INVALID_ARGUMENTS = f"Error on {self.line}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
+                            INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
                             engine.runAndWait()
                             self.arguments = []
@@ -228,7 +229,7 @@ class Arguments():
                     except ValueError:
 
                         engine = pyttsx3.init()
-                        NUM_NOT_NUM = f"Error on {self.line}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
+                        NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
                         engine.say(NUM_NOT_NUM)
                         engine.runAndWait()
                         self.arguments = []
