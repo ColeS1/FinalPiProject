@@ -71,7 +71,7 @@ class Functions():
 
             return "Go Forward"
         
-        elif self.analog_value in range(506, 517):
+        elif self.analog_value in range(506, 520):
 
             return "Turn Left"
         
@@ -98,6 +98,7 @@ class Functions():
         else:
 
             return "None"
+            
 
 
 pygame.init()
@@ -108,7 +109,7 @@ for i in range(1, 13):
 
 # Initialize pygame library and display
 
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((800, 650))
 
 # Create a person object
 
