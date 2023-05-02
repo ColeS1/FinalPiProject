@@ -13,10 +13,10 @@ void loop() {
   int analog_line5 = analogRead(A4);
   int analog_line6 = analogRead(A5);
 
-  Serial.print("Line 1: "); Serial.print(String(analog_line1));
-  Serial.print(" Line 2: "); Serial.print(String(analog_line2));
-  Serial.print(" Line 3: "); Serial.print(String(analog_line3));
-  Serial.print(" Line 4: "); Serial.print(String(analog_line4));
-  Serial.print(" Line 5: "); Serial.print(String(analog_line5));
-  Serial.print(" Line 6: "); Serial.println(String(analog_line6));
+  Serial.print("Line1"); Serial.print(String(analog_line1));
+  Serial.print(" Line2"); Serial.print(String(analog_line2));
+  Serial.print(" Line3"); Serial.print(String(analog_line3));
+  Serial.print(" Line4"); Serial.print(String(analog_line4));
+  Serial.print(" Line5"); Serial.print(String(analog_line5));
+  Serial.print(" Line6"); Serial.println(String(analog_line6));
 }
