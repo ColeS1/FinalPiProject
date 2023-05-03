@@ -319,16 +319,6 @@ def program_startup():
             pygame.draw.rect(screen, GREY, functions.rect)
             screen.blit(functions.font_surface, functions.rect_centered)  # blit the text surface onto the rectangle
 
-        for (no_arguments, y_location) in zip(placeholder_arguments, (range(50, 601, 50))):
-
-
-            font_surface = FONT.render(no_arguments, True, WHITE_FONT)
-
-            rect = pygame.Rect((600, y_location, Arguments.WIDTH, Arguments.HEIGHT))
-            rect_centered = font_surface.get_rect(center=rect.center)
-            
-            pygame.draw.rect(screen, GREY, rect)
-            screen.blit(font_surface, rect_centered)
 
         if GPIO.input(12) == True:
 
@@ -339,6 +329,18 @@ def program_startup():
 
             RUNNING = False
             sleep(0.2)
+            continue
+
+        for (no_arguments, y_location) in zip(placeholder_arguments, (range(50, 601, 50))):
+
+
+            font_surface = FONT.render(no_arguments, True, WHITE_FONT)
+
+            rect = pygame.Rect((600, y_location, Arguments.WIDTH, Arguments.HEIGHT))
+            rect_centered = font_surface.get_rect(center=rect.center)
+            
+            pygame.draw.rect(screen, GREY, rect)
+            screen.blit(font_surface, rect_centered)
 
         
 
