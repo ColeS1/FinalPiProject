@@ -384,7 +384,6 @@ def program_startup():
             argument = Arguments(line_number, function.function_name)
             list_of_arguments.append(argument)
 
-        button_list = buttons()
 
         memory_of_args.append(list_of_arguments[argument_counter])
 
@@ -398,10 +397,18 @@ def program_startup():
         for arguments in list_of_arguments:
 
             if list_of_arguments.index(arguments) == argument_counter:
+
+                if arguments.function_name == "None":
+                    continue
+
                 WRONG = True
                 while WRONG:
-        
-                    string = arguments.string_of_arguments_determiner(button_list)
+                    
+                    engine = pyttsx3.init()
+                    engine.say(f"Currently on Line {argument_counter + 1} for putting arguments onto {arguments.function_name} block.")
+                    engine.runAndWait()
+
+                    string = arguments.string_of_arguments_determiner(buttons())
 
                     if string == "Error":
 
