@@ -451,16 +451,21 @@ def program_startup():
 
         if GPIO.input(23) == True:
 
+            engine = pyttsx3.init()
+            engine.say("Reading lines, please select a line number to read its block and arguments")
+            engine.runAndWait()
+            sleep(0.2)
+
             WRONG = True
             while WRONG == True:
 
                 if len(buttons()) == 1:
 
-                    button_value = (buttons())[1]
+                    button_value = (buttons())[0]
                     WRONG = False
 
-                elif len(buttons()) == 3:
-                    button_value = (buttons())[1] + (buttons())[2]
+                elif len(buttons()) == 2:
+                    button_value = (buttons())[0] + (buttons())[1]
                     WRONG = False
 
                 else:
