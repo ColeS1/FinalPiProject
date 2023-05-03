@@ -450,17 +450,20 @@ def program_startup():
     while RUN_NOT_PRESSED:
 
         if GPIO.input(23) == True:
-
+            
+            print("jjtjtfhth")
             WRONG = True
             while WRONG == True:
 
                 if len(buttons()) == 2:
 
-                    button_value = (buttons())[1]
+                    button = buttons()
+                    button_value = button[1]
                     WRONG = False
 
                 elif len(buttons()) == 3:
-                    button_value = (buttons())[1] + (buttons())[2]
+                    button = buttons()
+                    button_value = button[1] + button[2]
                     WRONG = False
 
                 else:
@@ -485,7 +488,7 @@ def program_startup():
 
         elif GPIO.input(27) == True:
 
-            pass #FIGURE THIS OUT LATER WITH MAYBE A FUNCTION
+            pass #FIGURE THIS OUT LATER WITH MAYBE A FUNCTION ALONG WITH STUFF RIGHT ABOVE THIS
 
             
 
