@@ -71,5 +71,3 @@ class IfStatement:
     def __str__(self):
         return "If Statement"
 
-
-

@@ -36,7 +36,7 @@ class GUI:
         self.pins = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
 
         # the values associated with each pin
-        self.button_vals = {17: "1",
+        self.dict_button_vals = {17: "1",
                             16: "2",
                             13: "3",
                             6: "4",
@@ -266,9 +266,9 @@ class GUI:
                 self.event_handling()
                 for pin in self.pins:
                         if GPIO.input(pin) == HIGH:
-                            self.argument_setting(self.button_vals[pin])
+                            self.argument_setting(self.dict_button_vals[pin])
                             self.change_text()
-                            sleep(0.2)
+                            sleep(0.1)
 
                 # checks if locked button is pressed again, breaks loop if it is
                 if GPIO.input(12) == HIGH:
