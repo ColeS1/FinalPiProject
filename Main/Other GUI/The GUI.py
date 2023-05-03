@@ -125,6 +125,7 @@ class Arguments():
         self.line_number = f"Line {line_number}"
         self.function_name = function_name
 
+        self.string = "No Arguments"
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
         self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
 
@@ -138,11 +139,13 @@ class Arguments():
                 if int("".join(list_of_arguments)) in range(0, 100):
 
                     if self.function_name == "For Loop":
-
+                        
+                        self.string = "Repeat" + "".join(list_of_arguments) + "times"
                         return "Repeat" + "".join(list_of_arguments) + "times"
 
                     else:
-
+                        
+                        self.string = "".join(list_of_arguments) + "seconds"
                         return "".join(list_of_arguments) + "seconds"
                     
 
@@ -183,6 +186,7 @@ class Arguments():
                     try:
                         
                         if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10):
+                            self.string = " ".join(list_of_arguments) + "cm"
                             return " ".join(list_of_arguments) + "cm"
 
                         else:
@@ -208,7 +212,8 @@ class Arguments():
                     try:
                         
                         if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10) and int(list_of_arguments[3] in range(0, 10)):
-
+                            
+                            self.string = list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
                             return list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
 
                         else:
@@ -229,6 +234,7 @@ class Arguments():
                         self.string_of_arguments = "Error 7"
 
         elif self.function_name == "None": 
+            self.string = "No Arguments"
             return "No Arguments"
             
 
@@ -391,7 +397,11 @@ def program_startup():
        
         for arguments in list_of_arguments:
 
-            string = arguments.string_of_arguments_determiner(button_list)
+            if list_of_arguments.index(arguments) == argument_counter:
+                string = arguments.string_of_arguments_determiner(button_list)
+
+            else:
+                string = arguments.string
 
             font_surface = FONT.render(string, True, WHITE_FONT)
             centered = font_surface.get_rect(center=arguments.rect.center)
