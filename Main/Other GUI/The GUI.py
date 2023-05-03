@@ -1,16 +1,11 @@
-#####################################################################
-# author: Cole Sylvester
-# date:   March 20th, 2023 
-# description: Person Reloaded Programming Assignment
-#####################################################################
 import pygame
 from testingserial import serial_monitor
 import pyttsx3
-
+from CONSTANTS import *
 
 class Line():
     HEIGHT = 50
-    WIDTH = 200
+    WIDTH = 300
     LINE_HEIGHTS = {
                     "Line 1": 50,
                     "Line 2": 100,
@@ -31,8 +26,8 @@ class Line():
         self.name = f"Line {number}"
         self.height = Line.LINE_HEIGHTS[self.name]
         self.rect = pygame.Rect((0, self.height, Line.WIDTH, Line.HEIGHT))
-        self.font = pygame.font.Font(None, 36)
-        self.font_surface = self.font.render(self.name, True, (255, 255, 255))
+        self.font = FONT
+        self.font_surface = self.font.render(self.name, True, WHITE_FONT)
         self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
 
 class Functions():
@@ -60,11 +55,11 @@ class Functions():
         self.function_location_name:str = f"Function {line_number}"
         self.height = Functions.FUNCTION_HEIGHTS[self.function_location_name]
         self.rect = pygame.Rect((200, self.height, Functions.WIDTH, Functions.HEIGHT))
-        self.font = pygame.font.Font(None, 36)
+        self.font = FONT
 
         self.analog_value:int = analog_value
 
-        self.font_surface = self.font.render(self.function_determiner(), True, (255, 255, 255))
+        self.font_surface = self.font.render(self.function_determiner(), True, WHITE_FONT)
         self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
 
     def function_determiner(self):
@@ -106,18 +101,18 @@ class Arguments():
     HEIGHT = 50
     WIDTH = 300
     ARGUMENT_HEIGHTS = {
-                    "ARGUMENT 1": 50,
-                    "ARGUMENT 2": 100,
-                    "ARGUMENT 3": 150,
-                    "ARGUMENT 4": 200,
-                    "ARGUMENT 5": 250,
-                    "ARGUMENT 6": 300,
-                    "ARGUMENT 7": 350,
-                    "ARGUMENT 8": 400,
-                    "ARGUMENT 9": 450,
-                    "ARGUMENT 10": 500,
-                    "ARGUMENT 11": 550,
-                    "ARGUMENT 12": 600
+                    "Argument 1": 50,
+                    "Argument 2": 100,
+                    "Argument 3": 150,
+                    "Argument 4": 200,
+                    "Argument 5": 250,
+                    "Argument 6": 300,
+                    "Argument 7": 350,
+                    "Argument 8": 400,
+                    "Argument 9": 450,
+                    "Argument 10": 500,
+                    "Argument 11": 550,
+                    "Argument 12": 600
                     }
 
     def __init__ (self, line_number, function_name, list_of_arguments: list):
@@ -130,9 +125,9 @@ class Arguments():
 
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
         self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
-        self.font = pygame.font.Font(None, 36)
+        self.font = FONT
 
-        self.font_surface = self.font.render(self.string_of_arguments, True, (255, 255, 255))
+        self.font_surface = self.font.render(self.string_of_arguments, True, WHITE_FONT)
         self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
 
     @property
@@ -234,7 +229,7 @@ class Arguments():
                         engine.runAndWait()
                         self.arguments = []
 
-        else: 
+        elif self.function_name == "None": 
             self._string_of_arguments = "No Arguments"
             
 
@@ -247,7 +242,7 @@ for i in range(1, 13):
 
 # Initialize pygame library and display
 
-screen = pygame.display.set_mode((800, 650))
+screen = pygame.display.set_mode((900, 650))
 
 # Create a person object
 
@@ -268,50 +263,75 @@ from pygame.locals import (
 
 buttons = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
 
-GPIO.setmode(GPIO.BCM)
+placeholder_arguments = ["No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments"]
 
-GPIO.setup(buttons, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+# GPIO.setmode(GPIO.BCM)
 
-while (RUNNING):
-    # Look through all the events that happened in the last frame to see
-    # if the user tried to exit.
-    for event in pygame.event.get():
-        if (event.type == KEYDOWN and event.key == K_ESCAPE):
-            RUNNING = False
-        elif (event.type == QUIT):
-            RUNNING = False
-
-    list_of_analogs = serial_monitor()
-    function_list = []
-
-    for (i, j) in zip((range(1, 13)), (list_of_analogs)):
-
-        function_list.append(Functions(i, j))
-
-    header_height = 50
-    header_list = ["Line #", "Block Type", "Arguments"]
-    header_dict = {"Line #": 0, "Block Type": 200, "Arguments": 400}
+# GPIO.setup(buttons, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
 
-    for i in header_list:
 
-        font = pygame.font.Font(None, 36)
-        font_surface = font.render(i, True, (255, 255, 255))
-        rect = pygame.Rect((header_dict[i], 0, Line.WIDTH, Line.HEIGHT))
-        rect_centered = font_surface.get_rect(center=rect.center)
-        pygame.draw.rect(screen, [0xA2, 0xAA, 0xAD], rect)
-        screen.blit(font_surface, rect_centered)
-    
-    for lines in line_list:
+def program_startup():
 
-        pygame.draw.rect(screen, [0xA2, 0xAA, 0xAD], lines.rect)
-        screen.blit(lines.font_surface, lines.rect_centered)  # blit the text surface onto the rectangle
+    while (RUNNING):
+        # Look through all the events that happened in the last frame to see
+        # if the user tried to exit.
+        for event in pygame.event.get():
+            if (event.type == KEYDOWN and event.key == K_ESCAPE):
+                RUNNING = False
+            elif (event.type == QUIT):
+                RUNNING = False
 
-    for functions in function_list:
-       
-       pygame.draw.rect(screen, [0xA2, 0xAA, 0xAD], functions.rect)
-       screen.blit(functions.font_surface, functions.rect_centered)  # blit the text surface onto the rectangle 
+        list_of_analogs = serial_monitor()
+        function_list = []
 
-    pygame.display.flip()
+        for (line_number, analog_values) in zip((range(1, 13)), (list_of_analogs)):
+
+            function_list.append(Functions(line_number, analog_values))
+
+        header_list = ["Line #", "Block Type", "Arguments"]
+        header_dict = {"Line #": 0, "Block Type": 200, "Arguments": 400}
+
+
+        for i in header_list:
+
+            font = FONT
+            font_surface = font.render(i, True, WHITE_FONT)
+
+            rect = pygame.Rect((header_dict[i], 0, Line.WIDTH, Line.HEIGHT))
+            rect_centered = font_surface.get_rect(center=rect.center)
+
+            pygame.draw.rect(screen, GREY, rect)
+            screen.blit(font_surface, rect_centered)
+        
+        for lines in line_list:
+
+            pygame.draw.rect(screen, GREY, lines.rect)
+            screen.blit(lines.font_surface, lines.rect_centered)  # blit the text surface onto the rectangle
+
+        for functions in function_list:
+        
+            pygame.draw.rect(screen, GREY, functions.rect)
+            screen.blit(functions.font_surface, functions.rect_centered)  # blit the text surface onto the rectangle
+
+        for (no_arguments, y_location) in zip(placeholder_arguments, (range(50, 601, 50))):
+
+            font = FONT
+            font_surface = font.render(no_arguments, True, WHITE_FONT)
+
+            rect = pygame.Rect((600, y_location, Arguments.WIDTH, Arguments.HEIGHT))
+            rect_centered = font_surface.get_rect(center=rect.center)
+            
+            pygame.draw.rect(screen, GREY, rect)
+            screen.blit(font_surface, rect_centered)
+
+
+        pygame.display.flip()
+
+    RUNNING_ARGS = True
+
+
+
+program_startup()
 
 
