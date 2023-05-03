@@ -54,7 +54,7 @@ class Functions():
 
         self.function_location_name:str = f"Function {line_number}"
         self.height = Functions.FUNCTION_HEIGHTS[self.function_location_name]
-        self.rect = pygame.Rect((200, self.height, Functions.WIDTH, Functions.HEIGHT))
+        self.rect = pygame.Rect((300, self.height, Functions.WIDTH, Functions.HEIGHT))
         self.font = FONT
 
         self.analog_value:int = analog_value
@@ -246,8 +246,7 @@ screen = pygame.display.set_mode((900, 650))
 
 # Create a person object
 
-RUNNING = True  # A variable to determine whether to get out of the
-                # infinite game loop
+RUNNING = True 
 
 from pygame.locals import (
     RLEACCEL,
@@ -273,6 +272,8 @@ placeholder_arguments = ["No Arguments", "No Arguments", "No Arguments", "No Arg
 
 def program_startup():
 
+    RUNNING = True
+
     while (RUNNING):
         # Look through all the events that happened in the last frame to see
         # if the user tried to exit.
@@ -289,8 +290,8 @@ def program_startup():
 
             function_list.append(Functions(line_number, analog_values))
 
-        header_list = ["Line #", "Block Type", "Arguments"]
-        header_dict = {"Line #": 0, "Block Type": 200, "Arguments": 400}
+        header_list = ["Line #:", "Block Type:", "Arguments:"]
+        header_dict = {"Line #:": 0, "Block Type:": 300, "Arguments:": 600}
 
 
         for i in header_list:
@@ -316,8 +317,8 @@ def program_startup():
 
         for (no_arguments, y_location) in zip(placeholder_arguments, (range(50, 601, 50))):
 
-            font = FONT
-            font_surface = font.render(no_arguments, True, WHITE_FONT)
+
+            font_surface = FONT.render(no_arguments, True, WHITE_FONT)
 
             rect = pygame.Rect((600, y_location, Arguments.WIDTH, Arguments.HEIGHT))
             rect_centered = font_surface.get_rect(center=rect.center)
