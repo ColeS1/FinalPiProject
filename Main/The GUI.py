@@ -247,7 +247,7 @@ for i in range(1, 13):
 
 # Initialize pygame library and display
 
-screen = pygame.display.set_mode((900, 650))
+screen = pygame.display.set_mode((900, 650), pygame.FULLSCREEN)
 
 # Create a person object
 
