@@ -211,10 +211,10 @@ class Arguments():
 
                     try:
                         
-                        if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10) and int(list_of_arguments[3] in range(0, 10)):
+                        if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10) and (int(list_of_arguments[3]) in range(0, 10)):
                             
                             self.string = list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
-                            return list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
+                            return list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3] + "cm")
 
                         else:
 
@@ -497,10 +497,27 @@ def program_startup():
             for (line_numbers, function_values, argument_values) in zip(line_list, function_list, list_of_arguments):
 
                 list_of_values = [line_numbers.name, function_values.function_name, argument_values.string]
-                line_function_argument_list.append(list_of_values)
-
-            print(line_function_argument_list)
+                line_function_argument_list.append(list_of_values)  #line_function_argument_list will have all of the values of the lines of code to evenually decode to send to micro:bit
             
+        elif GPIO.input(19) == True:
+
+            engine = pyttsx3.init()
+            engine.say("Are you sure?")
+            engine.runAndWait()
+            sleep(0.2)
+
+            secret_to_restart = ["1", "2", "3", "4"]
+
+            secret_list = buttons()
+
+            if secret_list == secret_to_restart:
+
+                engine = pyttsx3.init()
+                engine.say("Restarting...")
+                engine.runAndWait()
+                sleep(0.2)
+                RUN_NOT_PRESSED = False
+                program_startup()
 
 
 
