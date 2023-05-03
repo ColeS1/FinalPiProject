@@ -162,7 +162,7 @@ class Arguments():
             except ValueError:
 
                 engine = pyttsx3.init()
-                WRONG_ARGUMENT = f"Error on {self.line_number}. Please put in only numbers for {self.function_arguments}. Erasing all arguments..."
+                WRONG_ARGUMENT = f"Error on {self.line_number}. Please put in only numbers for {self.function_name} blocks. Erasing all arguments..."
                 engine.say(WRONG_ARGUMENT)
                 engine.runAndWait()
                 return "Error"
