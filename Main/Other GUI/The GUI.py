@@ -5,6 +5,8 @@
 #####################################################################
 import pygame
 from testingserial import serial_monitor
+import pyttsx3
+
 
 class Line():
     HEIGHT = 50
@@ -53,11 +55,11 @@ class Functions():
     
 
     
-    def __init__(self, number: int, analog_value: int):
+    def __init__(self, line_number: int, analog_value: int):
 
-        self.function_location_name:str = f"Function {number}"
+        self.function_location_name:str = f"Function {line_number}"
         self.height = Functions.FUNCTION_HEIGHTS[self.function_location_name]
-        self.rect = pygame.Rect((200, self.height, Line.WIDTH, Line.HEIGHT))
+        self.rect = pygame.Rect((200, self.height, Functions.WIDTH, Functions.HEIGHT))
         self.font = pygame.font.Font(None, 36)
 
         self.analog_value:int = analog_value
@@ -98,6 +100,142 @@ class Functions():
         else:
 
             return "None"
+        
+class Arguments():
+
+    HEIGHT = 50
+    WIDTH = 300
+    ARGUMENT_HEIGHTS = {
+                    "ARGUMENT 1": 50,
+                    "ARGUMENT 2": 100,
+                    "ARGUMENT 3": 150,
+                    "ARGUMENT 4": 200,
+                    "ARGUMENT 5": 250,
+                    "ARGUMENT 6": 300,
+                    "ARGUMENT 7": 350,
+                    "ARGUMENT 8": 400,
+                    "ARGUMENT 9": 450,
+                    "ARGUMENT 10": 500,
+                    "ARGUMENT 11": 550,
+                    "ARGUMENT 12": 600
+                    }
+
+    def __init__ (self, line_number, function_name, list_of_arguments: list):
+
+        self.argument_location_name = f"Argument {line_number}"
+        self.line_number = f"Line {line_number}"
+        self.function_name = function_name
+        self.arguments = list_of_arguments
+        self.string_of_arguments = "No Arguments"
+
+        self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
+        self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
+        self.font = pygame.font.Font(None, 36)
+
+        self.font_surface = self.font.render(self.string_of_arguments, True, (255, 255, 255))
+        self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
+
+    @property
+    def function_arguments(self):
+
+        return self._string_of_arguments
+
+    @function_arguments.setter
+    def function_arguments(self):
+
+        if self.function_name == "Go Forward" or self.function_name == "Turn Left" or self.function_name == "Turn Right" or self.function_name == "Go Reverse" or self.function_name == "For Loop":
+            try:
+
+                if int("".join(self.arguments)) in range(0, 100):
+
+                    if self.function_name == "For Loop":
+
+                        self._string_of_arguments = "Repeat" + "".join(self.arguments) + "times"
+
+                    else:
+
+                        self._string_of_arguments = "".join(self.arguments) + "seconds"
+                    
+
+                else: 
+                    
+                    engine = pyttsx3.init()
+                    VALUE_TOO_HIGH = f"Error on {self.line_number}. Numbers cannot exceed must stay between 0 and 99. Erasing all arguments..."
+                    engine.say(VALUE_TOO_HIGH)
+                    engine.runAndWait()
+                    self.arguments = []
+
+
+            except ValueError:
+
+                engine = pyttsx3.init()
+                WRONG_ARGUMENT = f"Error on {self.line_number}. Please put in only numbers for {self.function_arguments}. Erasing all arguments..."
+                engine.say(WRONG_ARGUMENT)
+                engine.runAndWait()
+                self.arguments = []
+
+        elif self.function_name == "While Loop" or self.function_name == "If":
+
+            if len(self.arguments) not in range(3, 5):
+
+                engine = pyttsx3.init()
+                TOO_MANY_ARGUMENTS = f"Error on {self.line_number}. Too many arguments entered for {self.function_name}. Erasing all arguments..."
+                engine.say(TOO_MANY_ARGUMENTS)
+                engine.runAndWait()
+                self.arguments = []
+
+            elif len(self.arguments) in range(3, 5):
+
+                if len(self.arguments) == 3:
+
+                    try:
+                        
+                        if self.arguments[0] == "Ping" and (self.arguments[1] == "<" or self.arguments[1] == ">") and int(self.arguments[2]) in range(0, 10):
+                            self._string_of_arguments = " ".join(self.arguments) + "cm"
+
+                        else:
+
+                            engine = pyttsx3.init()
+                            INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
+                            engine.say(INVALID_ARGUMENTS)
+                            engine.runAndWait()
+                            self.arguments = []
+                            
+
+                    except ValueError:
+
+                        engine = pyttsx3.init()
+                        NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
+                        engine.say(NUM_NOT_NUM)
+                        engine.runAndWait()
+                        self.arguments = []
+
+                elif len(self.arguments) == 4:
+
+                    try:
+                        
+                        if self.arguments[0] == "Ping" and (self.arguments[1] == "<" or self.arguments[1] == ">") and int(self.arguments[2]) in range(0, 10) and int(self.arguments[3] in range(0, 10)):
+
+                            self._string_of_arguments = self.arguments[0] + " " + self.arguments[1] + " " + (self.arguments[2] + self.arguments[3])
+
+                        else:
+
+                            engine = pyttsx3.init()
+                            INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
+                            engine.say(INVALID_ARGUMENTS)
+                            engine.runAndWait()
+                            self.arguments = []
+
+                    except ValueError:
+
+                        engine = pyttsx3.init()
+                        NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
+                        engine.say(NUM_NOT_NUM)
+                        engine.runAndWait()
+                        self.arguments = []
+
+        else: 
+            self._string_of_arguments = "No Arguments"
             
 
 
@@ -127,6 +265,12 @@ from pygame.locals import (
     QUIT,
     K_SPACE,
 )
+
+buttons = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(buttons, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
 while (RUNNING):
     # Look through all the events that happened in the last frame to see

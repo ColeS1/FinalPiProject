@@ -3,8 +3,8 @@ import serial
 
 def serial_monitor():
 
-    ser = serial.Serial('COM3', 19200, timeout=1)
-    ser2 = serial.Serial('COM4', 19200, timeout=1)
+    ser = serial.Serial('/dev/ttyACM0', 19200, timeout=1)
+    ser2 = serial.Serial('/dev/ttyACM1', 19200, timeout=1)
 
     while True:
         try:
