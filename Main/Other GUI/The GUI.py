@@ -124,13 +124,10 @@ class Arguments():
         self.argument_location_name = f"Argument {line_number}"
         self.line_number = f"Line {line_number}"
         self.function_name = function_name
-        self.string_of_arguments = "No Arguments"
 
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
         self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
-        self.font = FONT
 
-        self.font_surface = self.font.render(self.string_of_arguments, True, WHITE_FONT)
         self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
 
     
@@ -143,11 +140,11 @@ class Arguments():
 
                     if self.function_name == "For Loop":
 
-                        self.string_of_arguments = "Repeat" + "".join(list_of_arguments) + "times"
+                        return "Repeat" + "".join(list_of_arguments) + "times"
 
                     else:
 
-                        self.string_of_arguments = "".join(list_of_arguments) + "seconds"
+                        return "".join(list_of_arguments) + "seconds"
                     
 
                 else: 
@@ -187,10 +184,9 @@ class Arguments():
                     try:
                         
                         if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10):
-                            self.string_of_arguments = " ".join(list_of_arguments) + "cm"
+                            return " ".join(list_of_arguments) + "cm"
 
                         else:
-                            print(list_of_arguments)
                             engine = pyttsx3.init()
                             INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
@@ -214,7 +210,7 @@ class Arguments():
                         
                         if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10) and int(list_of_arguments[3] in range(0, 10)):
 
-                            self.string_of_arguments = list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
+                            return list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
 
                         else:
 
@@ -234,7 +230,7 @@ class Arguments():
                         self.string_of_arguments = "Error 7"
 
         elif self.function_name == "None": 
-            self.string_of_arguments = "No Arguments"
+            return "No Arguments"
             
 
 
@@ -393,16 +389,16 @@ def program_startup():
 
             list_of_arguments[f] = memory_of_args[f]
             f += 1
-
-        
-        
+       
         for arguments in list_of_arguments:
 
-            if list_of_arguments.index(arguments) == argument_counter:
-                argument.string_of_arguments_determiner(button_list)
+            string = arguments.string_of_arguments_determiner(button_list)
+
+            font_surface = FONT.render(string, True, WHITE_FONT)
+            font = font_surface.get_rect(center=arguments.rect.center)
                         
             pygame.draw.rect(screen, GREY, arguments.rect)
-            screen.blit(arguments.font_surface, arguments.rect_centered)
+            screen.blit(font_surface, arguments.rect_centered)
         
         argument_counter += 1
 
