@@ -118,15 +118,13 @@ class Arguments():
                     "Argument 12": 600
                     }
 
-    def __init__ (self, line_number, function_name, list_of_arguments: list):
+    def __init__ (self, line_number, function_name):
 
         self.argument_location_name = f"Argument {line_number}"
         self.line_number = f"Line {line_number}"
         self.function_name = function_name
-        self.arguments = list_of_arguments
         self.string_of_arguments = "No Arguments"
 
-        print(self.argument_location_name)
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
         self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
         self.font = FONT
@@ -134,26 +132,21 @@ class Arguments():
         self.font_surface = self.font.render(self.string_of_arguments, True, WHITE_FONT)
         self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
 
-    @property
-    def function_arguments(self):
-
-        return self._string_of_arguments
-
-    @function_arguments.setter
-    def function_arguments(self):
+    
+    def string_of_arguments_determiner(self, list_of_arguments):
 
         if self.function_name == "Go Forward" or self.function_name == "Turn Left" or self.function_name == "Turn Right" or self.function_name == "Go Reverse" or self.function_name == "For Loop":
             try:
 
-                if int("".join(self.arguments)) in range(0, 100):
+                if int("".join(list_of_arguments)) in range(0, 100):
 
                     if self.function_name == "For Loop":
 
-                        self._string_of_arguments = "Repeat" + "".join(self.arguments) + "times"
+                        self.string_of_arguments = "Repeat" + "".join(list_of_arguments) + "times"
 
                     else:
 
-                        self._string_of_arguments = "".join(self.arguments) + "seconds"
+                        self.string_of_arguments = "".join(list_of_arguments) + "seconds"
                     
 
                 else: 
@@ -162,7 +155,8 @@ class Arguments():
                     VALUE_TOO_HIGH = f"Error on {self.line_number}. Numbers cannot exceed must stay between 0 and 99. Erasing all arguments..."
                     engine.say(VALUE_TOO_HIGH)
                     engine.runAndWait()
-                    self.arguments = []
+                    self.string_of_arguments = "Error"
+                    
 
 
             except ValueError:
@@ -171,26 +165,28 @@ class Arguments():
                 WRONG_ARGUMENT = f"Error on {self.line_number}. Please put in only numbers for {self.function_arguments}. Erasing all arguments..."
                 engine.say(WRONG_ARGUMENT)
                 engine.runAndWait()
-                self.arguments = []
+                self.string_of_arguments = "Error"
+                
 
         elif self.function_name == "While Loop" or self.function_name == "If":
 
-            if len(self.arguments) not in range(3, 5):
+            if len(list_of_arguments) not in range(3, 5):
 
                 engine = pyttsx3.init()
                 TOO_MANY_ARGUMENTS = f"Error on {self.line_number}. Too many arguments entered for {self.function_name}. Erasing all arguments..."
                 engine.say(TOO_MANY_ARGUMENTS)
                 engine.runAndWait()
-                self.arguments = []
+                self.string_of_arguments = "Error"
+                
 
-            elif len(self.arguments) in range(3, 5):
+            elif len(list_of_arguments) in range(3, 5):
 
-                if len(self.arguments) == 3:
+                if len(list_of_arguments) == 3:
 
                     try:
                         
-                        if self.arguments[0] == "Ping" and (self.arguments[1] == "<" or self.arguments[1] == ">") and int(self.arguments[2]) in range(0, 10):
-                            self._string_of_arguments = " ".join(self.arguments) + "cm"
+                        if list_of_arguments[0] == "Ping" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10):
+                            self.string_of_arguments = " ".join(list_of_arguments) + "cm"
 
                         else:
 
@@ -198,7 +194,8 @@ class Arguments():
                             INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
                             engine.runAndWait()
-                            self.arguments = []
+                            self.string_of_arguments = "Error"
+                            
                             
 
                     except ValueError:
@@ -207,15 +204,16 @@ class Arguments():
                         NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
                         engine.say(NUM_NOT_NUM)
                         engine.runAndWait()
-                        self.arguments = []
+                        self.string_of_arguments = "Error"
+                        
 
-                elif len(self.arguments) == 4:
+                elif len(list_of_arguments) == 4:
 
                     try:
                         
-                        if self.arguments[0] == "Ping" and (self.arguments[1] == "<" or self.arguments[1] == ">") and int(self.arguments[2]) in range(0, 10) and int(self.arguments[3] in range(0, 10)):
+                        if list_of_arguments[0] == "Ping" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10) and int(list_of_arguments[3] in range(0, 10)):
 
-                            self._string_of_arguments = self.arguments[0] + " " + self.arguments[1] + " " + (self.arguments[2] + self.arguments[3])
+                            self.string_of_arguments = list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
 
                         else:
 
@@ -223,7 +221,8 @@ class Arguments():
                             INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
                             engine.runAndWait()
-                            self.arguments = []
+                            self.string_of_arguments = "Error"
+                            
 
                     except ValueError:
 
@@ -231,10 +230,10 @@ class Arguments():
                         NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
                         engine.say(NUM_NOT_NUM)
                         engine.runAndWait()
-                        self.arguments = []
+                        self.string_of_arguments = "Error"
 
         elif self.function_name == "None": 
-            self._string_of_arguments = "No Arguments"
+            self.string_of_arguments = "No Arguments"
             
 
 
@@ -343,6 +342,8 @@ def program_startup():
 
     RUNNING_ARGS = True
 
+    argument_counter = 0
+
     while (RUNNING_ARGS):
 
         for event in pygame.event.get():
@@ -371,23 +372,23 @@ def program_startup():
             pygame.draw.rect(screen, GREY, functions.rect)
             screen.blit(functions.font_surface, functions.rect_centered)
 
-            list_of_arguments = ["No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments"]
+        
+        INVALID_ARGUMENT = True
 
-        for (line_number, function_name) in zip(range(1, 13)), function_list):
+        list_of_arguments = []
 
-            INVALID_ARGUMENT = True
+        for (line_number, function_name) in zip((range(1, 13)), function_list):
+            
+            argument = Arguments(line_number, function_name)
+            list_of_arguments.append(argument)
 
-            while INVALID_ARGUMENT:
-                button_list = buttons()
-                argument = Arguments(line_number, function_name, button_list)
+        button_list = buttons()
+        list_of_arguments[argument_counter].string_of_arguments_determiner(button_list)
 
-                if argument.string_of_arguments == "No Argument":
-
-                    continue
-
-                else:
-
-                    list_of_arguments[line_number - 1] = argument
+        for arguments in list_of_arguments:
+            
+            pygame.draw.rect(screen, GREY, arguments.rect)
+            screen.blit(arguments.font_surface, arguments.rect_centered)
 
         pygame.display.flip()
 
