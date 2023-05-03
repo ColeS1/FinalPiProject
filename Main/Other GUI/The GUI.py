@@ -443,15 +443,32 @@ def program_startup():
 
     RUN_NOT_PRESSED = True
 
+    engine = pyttsx3.init()
+    engine.say("Press read, then press a line number if you would like to hear the arguments of the block. Press Run if you are ready for your program to start")
+    engine.runAndWait()
+
     while RUN_NOT_PRESSED:
 
-        engine = pyttsx3.init()
-        engine.say("Press read and a line number if you would like to hear the arguments of the block. Press Run if you are ready for your program to start")
-        engine.runAndWait()
-
         if GPIO.input(23) == True:
-            
-            button_value = "".join(buttons())
+
+            WRONG = True
+            while WRONG == True:
+
+                if len(buttons()) == 2:
+
+                    button_value = (buttons())[1]
+                    WRONG = False
+
+                elif len(buttons()) == 3:
+                    button_value = (buttons())[1] + (buttons())[2]
+                    WRONG = False
+
+                else:
+
+                        engine = pyttsx3.init()
+                        engine.say("Invalid input, try putting in a number between 1 and 12.")
+                        engine.runAndWait()
+
             WRONG = True
             while WRONG:
                 if int(button_value) not in range(1, 13):
@@ -465,6 +482,10 @@ def program_startup():
                     engine = pyttsx3.init()
                     engine.say(f"Line {button_value} has a {function_list[button_value - 1].function_name} block and its arguments are {list_of_arguments[button_value - 1].string}")
                     engine.runAndWait()
+
+        elif GPIO.input(27) == True:
+
+            pass #FIGURE THIS OUT LATER WITH MAYBE A FUNCTION
 
             
 
