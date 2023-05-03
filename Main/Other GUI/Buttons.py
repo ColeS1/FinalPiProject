@@ -37,6 +37,7 @@ def buttons():
                 if i == 12:
 
                     RUNNING = False
+                    print(argument_list)
                     return argument_list
                 
                 else:

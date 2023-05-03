@@ -186,11 +186,11 @@ class Arguments():
 
                     try:
                         
-                        if list_of_arguments[0] == "Ping" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10):
+                        if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10):
                             self.string_of_arguments = " ".join(list_of_arguments) + "cm"
 
                         else:
-
+                            print(list_of_arguments)
                             engine = pyttsx3.init()
                             INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
@@ -212,7 +212,7 @@ class Arguments():
 
                     try:
                         
-                        if list_of_arguments[0] == "Ping" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10) and int(list_of_arguments[3] in range(0, 10)):
+                        if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10) and int(list_of_arguments[3] in range(0, 10)):
 
                             self.string_of_arguments = list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
 
