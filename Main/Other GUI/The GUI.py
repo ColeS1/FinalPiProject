@@ -373,7 +373,7 @@ def program_startup():
 
             list_of_arguments = ["No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments"]
 
-        for (line_number, function_name) in zip(line_list, function_list):
+        for (line_number, function_name) in zip(range(1, 13)), function_list):
 
             INVALID_ARGUMENT = True
 
