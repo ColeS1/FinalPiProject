@@ -319,16 +319,24 @@ def program_startup():
             pygame.draw.rect(screen, GREY, functions.rect)
             screen.blit(functions.font_surface, functions.rect_centered)  # blit the text surface onto the rectangle
 
-        for (no_arguments, y_location) in zip(placeholder_arguments, (range(50, 601, 50))):
+        list_of_arguments = []
 
-
-            font_surface = FONT.render(no_arguments, True, WHITE_FONT)
-
-            rect = pygame.Rect((600, y_location, Arguments.WIDTH, Arguments.HEIGHT))
-            rect_centered = font_surface.get_rect(center=rect.center)
+        for (line_number, function) in zip((range(1, 13)), function_list):
             
-            pygame.draw.rect(screen, GREY, rect)
-            screen.blit(font_surface, rect_centered)
+            argument = Arguments(line_number, function.function_name)
+            list_of_arguments.append(argument)
+
+        for arguments in list_of_arguments:
+
+            pygame.draw.rect(screen, GREY, arguments.rect)
+
+            what_to_show = arguments.string
+
+            font_surface = FONT.render(what_to_show, True, WHITE_FONT)
+            centered = font_surface.get_rect(center=arguments.rect.center)
+
+            pygame.draw.rect(screen, GREY, arguments.rect)
+            screen.blit(font_surface, centered)
 
         if GPIO.input(12) == True:
 
@@ -375,14 +383,17 @@ def program_startup():
             pygame.draw.rect(screen, GREY, functions.rect)
             screen.blit(functions.font_surface, functions.rect_centered)
 
+        for arguments in list_of_arguments:
 
-        list_of_arguments = []
+            pygame.draw.rect(screen, GREY, arguments.rect)
 
-        for (line_number, function) in zip((range(1, 13)), function_list):
-            
-            argument = Arguments(line_number, function.function_name)
-            list_of_arguments.append(argument)
+            what_to_show = arguments.string
 
+            font_surface = FONT.render(what_to_show, True, WHITE_FONT)
+            centered = font_surface.get_rect(center=arguments.rect.center)
+
+            pygame.draw.rect(screen, GREY, arguments.rect)
+            screen.blit(font_surface, centered)
 
         memory_of_args.append(list_of_arguments[argument_counter])
 
