@@ -123,7 +123,7 @@ class Arguments():
         self.argument_location_name = f"Argument {line_number}"
         self.line_number = f"Line {line_number}"
         self.function_name = function_name
-        self._string_of_arguments = "No Arguments"
+        self.string_of_arguments = "No Arguments"
 
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
         self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
