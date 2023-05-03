@@ -38,7 +38,9 @@ def buttons():
 
                     RUNNING = False
                     print(argument_list)
+                    sleep(0.3)
                     return argument_list
+
                 
                 else:
 

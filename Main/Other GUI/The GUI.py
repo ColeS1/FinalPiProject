@@ -128,7 +128,6 @@ class Arguments():
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
         self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
 
-        self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
 
     
     def string_of_arguments_determiner(self, list_of_arguments):
@@ -395,10 +394,10 @@ def program_startup():
             string = arguments.string_of_arguments_determiner(button_list)
 
             font_surface = FONT.render(string, True, WHITE_FONT)
-            font = font_surface.get_rect(center=arguments.rect.center)
+            centered = font_surface.get_rect(center=arguments.rect.center)
                         
             pygame.draw.rect(screen, GREY, arguments.rect)
-            screen.blit(font_surface, arguments.rect_centered)
+            screen.blit(font_surface, centered)
         
         argument_counter += 1
 
