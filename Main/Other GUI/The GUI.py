@@ -156,7 +156,7 @@ class Arguments():
                     VALUE_TOO_HIGH = f"Error on {self.line_number}. Numbers cannot exceed must stay between 0 and 99. Erasing all arguments..."
                     engine.say(VALUE_TOO_HIGH)
                     engine.runAndWait()
-                    self.string_of_arguments = "Error"
+                    self.string_of_arguments = "Error 1"
                     
 
 
@@ -166,7 +166,7 @@ class Arguments():
                 WRONG_ARGUMENT = f"Error on {self.line_number}. Please put in only numbers for {self.function_arguments}. Erasing all arguments..."
                 engine.say(WRONG_ARGUMENT)
                 engine.runAndWait()
-                self.string_of_arguments = "Error"
+                self.string_of_arguments = "Error 2"
                 
 
         elif self.function_name == "While Loop" or self.function_name == "If":
@@ -177,7 +177,7 @@ class Arguments():
                 TOO_MANY_ARGUMENTS = f"Error on {self.line_number}. Too many arguments entered for {self.function_name}. Erasing all arguments..."
                 engine.say(TOO_MANY_ARGUMENTS)
                 engine.runAndWait()
-                self.string_of_arguments = "Error"
+                self.string_of_arguments = "Error 3"
                 
 
             elif len(list_of_arguments) in range(3, 5):
@@ -195,7 +195,7 @@ class Arguments():
                             INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
                             engine.runAndWait()
-                            self.string_of_arguments = "Error"
+                            self.string_of_arguments = "Error 4"
                             
                             
 
@@ -205,7 +205,7 @@ class Arguments():
                         NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
                         engine.say(NUM_NOT_NUM)
                         engine.runAndWait()
-                        self.string_of_arguments = "Error"
+                        self.string_of_arguments = "Error 5"
                         
 
                 elif len(list_of_arguments) == 4:
@@ -222,7 +222,7 @@ class Arguments():
                             INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
                             engine.runAndWait()
-                            self.string_of_arguments = "Error"
+                            self.string_of_arguments = "Error 6"
                             
 
                     except ValueError:
@@ -231,7 +231,7 @@ class Arguments():
                         NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
                         engine.say(NUM_NOT_NUM)
                         engine.runAndWait()
-                        self.string_of_arguments = "Error"
+                        self.string_of_arguments = "Error 7"
 
         elif self.function_name == "None": 
             self.string_of_arguments = "No Arguments"
