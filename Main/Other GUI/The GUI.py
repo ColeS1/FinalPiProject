@@ -385,13 +385,13 @@ def program_startup():
 
         button_list = buttons()
 
-        memory_of_args.append(list_of_arguments[argument_counter].string_of_arguments_determiner(button_list))
+        memory_of_args.append(list_of_arguments[argument_counter])
 
         f = 0
 
         while f < len(memory_of_args):
 
-            list_of_arguments[f] = list_of_arguments[f].string_of_arguments_determiner(button_list)
+            list_of_arguments[f] = memory_of_args[f].string_of_arguments_determiner(button_list)
             f += 1
 
         print(list_of_arguments)
