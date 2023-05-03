@@ -127,7 +127,7 @@ class Arguments():
 
         self.string = "No Arguments"
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
-        self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
+        self.rect = pygame.Rect((600, self.height, Arguments.WIDTH, Arguments.HEIGHT))
 
 
     
