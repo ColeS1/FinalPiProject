@@ -126,6 +126,7 @@ class Arguments():
         self.arguments = list_of_arguments
         self.string_of_arguments = "No Arguments"
 
+        print(self.argument_location_name)
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
         self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
         self.font = FONT
