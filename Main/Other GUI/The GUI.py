@@ -390,6 +390,8 @@ def program_startup():
             
             pygame.draw.rect(screen, GREY, arguments.rect)
             screen.blit(arguments.font_surface, arguments.rect_centered)
+        
+        argument_counter += 1
 
         pygame.display.flip()
 

@@ -32,6 +32,8 @@ def buttons():
             
             if GPIO.input(i) == True:
                 
+                print(button_vals[i])
+
                 if i == 12:
 
                     RUNNING = False
