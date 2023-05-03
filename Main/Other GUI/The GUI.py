@@ -267,8 +267,6 @@ from pygame.locals import (
 
 button = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
 
-placeholder_arguments = ["No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments"]
-
 GPIO.setmode(GPIO.BCM)
 
 GPIO.setup(button, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
@@ -442,6 +440,34 @@ def program_startup():
         argument_counter += 1
 
         pygame.display.flip()
+
+    RUN_NOT_PRESSED = True
+
+    while RUN_NOT_PRESSED:
+
+        engine = pyttsx3.init()
+        engine.say("Press read and a line number if you would like to hear the arguments of the block. Press Run if you are ready for your program to start")
+        engine.runAndWait()
+
+        if GPIO.input(23) == True:
+            
+            button_value = "".join(buttons())
+            WRONG = True
+            while WRONG:
+                if int(button_value) not in range(1, 13):
+                        
+                    engine = pyttsx3.init()
+                    engine.say("That is not a valid line number. Try again.")
+                    engine.runAndWait()
+
+                else: 
+
+                    engine = pyttsx3.init()
+                    engine.say(f"Line {button_value} has a {function_list[button_value - 1].function_name} block and its arguments are {list_of_arguments[button_value - 1].string}")
+                    engine.runAndWait()
+
+            
+
 
 
 program_startup()
