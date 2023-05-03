@@ -264,9 +264,9 @@ buttons = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
 
 placeholder_arguments = ["No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments"]
 
-# GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 
-# GPIO.setup(buttons, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+GPIO.setup(buttons, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
 
 
@@ -296,8 +296,7 @@ def program_startup():
 
         for i in header_list:
 
-            font = FONT
-            font_surface = font.render(i, True, WHITE_FONT)
+            font_surface = FONT.render(i, True, WHITE_FONT)
 
             rect = pygame.Rect((header_dict[i], 0, Line.WIDTH, Line.HEIGHT))
             rect_centered = font_surface.get_rect(center=rect.center)
@@ -326,10 +325,39 @@ def program_startup():
             pygame.draw.rect(screen, GREY, rect)
             screen.blit(font_surface, rect_centered)
 
+        if GPIO.input(12) == True:
 
+            RUNNING = False
+            
         pygame.display.flip()
 
     RUNNING_ARGS = True
+
+    while (RUNNING_ARGS):
+
+        for i in header_list:
+
+            font_surface = FONT.render(i, True, WHITE_FONT)
+
+            rect = pygame.Rect((header_dict[i], 0, Line.WIDTH, Line.HEIGHT))
+            rect_centered = font_surface.get_rect(center=rect.center)
+
+            pygame.draw.rect(screen, GREY, rect)
+            screen.blit(font_surface, rect_centered)
+
+        for lines in line_list:
+
+            pygame.draw.rect(screen, GREY, lines.rect)
+            screen.blit(lines.font_surface, lines.rect_centered)
+
+        for functions in function_list:
+        
+            pygame.draw.rect(screen, GREY, functions.rect)
+            screen.blit(functions.font_surface, functions.rect_centered)
+
+        
+
+
 
 
 
