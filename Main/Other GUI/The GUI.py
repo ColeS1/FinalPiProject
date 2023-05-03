@@ -319,18 +319,6 @@ def program_startup():
             pygame.draw.rect(screen, GREY, functions.rect)
             screen.blit(functions.font_surface, functions.rect_centered)  # blit the text surface onto the rectangle
 
-
-        if GPIO.input(12) == True:
-
-            engine = pyttsx3.init()
-            LOCKED = "The rack is now locked"
-            engine.say(LOCKED)
-            engine.runAndWait()
-
-            RUNNING = False
-            sleep(0.2)
-            continue
-
         for (no_arguments, y_location) in zip(placeholder_arguments, (range(50, 601, 50))):
 
 
@@ -342,9 +330,19 @@ def program_startup():
             pygame.draw.rect(screen, GREY, rect)
             screen.blit(font_surface, rect_centered)
 
-        
+        if GPIO.input(12) == True:
 
+            engine = pyttsx3.init()
+            LOCKED = "The rack is now locked"
+            engine.say(LOCKED)
+            engine.runAndWait()
+
+            RUNNING = False
+            sleep(0.2)
+
+            
         pygame.display.flip()
+
 
     argument_counter = 0
     memory_of_args = []
@@ -432,16 +430,7 @@ def program_startup():
         
         argument_counter += 1
 
-        RUN_BUTTON_NOT_PRESSED = True
-
-        while RUN_BUTTON_NOT_PRESSED:
-
-            pass
-
-
         pygame.display.flip()
 
 
 program_startup()
-
-
