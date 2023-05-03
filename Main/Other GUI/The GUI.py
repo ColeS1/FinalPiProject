@@ -328,6 +328,11 @@ def program_startup():
 
         if GPIO.input(12) == True:
 
+            engine = pyttsx3.init()
+            LOCKED = "The rack is now locked"
+            engine.say(LOCKED)
+            engine.runAndWait()
+
             RUNNING = False
             
         pygame.display.flip()
@@ -363,8 +368,8 @@ def program_startup():
             INVALID_ARGUMENT = True
 
             while INVALID_ARGUMENT:
-
-                argument = Arguments(line_number, function_name, buttons())
+                button_list = buttons()
+                argument = Arguments(line_number, function_name, button_list)
 
                 if argument.string_of_arguments == "No Argument":
 
@@ -373,7 +378,7 @@ def program_startup():
                 else:
 
                     list_of_arguments[line_number - 1] = argument
-                    
+
 
 
 program_startup()
