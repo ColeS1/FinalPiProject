@@ -20,7 +20,7 @@ def buttons():
                 23: "Read",
                 19: "Dist"}
 
-    pins = button = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
+    pins = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
 
     argument_list = []
 
@@ -40,4 +40,4 @@ def buttons():
                 else:
 
                     argument_list.append(button_vals[i])
-                    sleep(0.2)
+                    sleep(0.3)
