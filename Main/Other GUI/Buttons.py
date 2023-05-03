@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+from time import sleep
 
 def buttons():
 
@@ -39,3 +40,4 @@ def buttons():
                 else:
 
                     argument_list.append(button_vals[i])
+                    sleep(0.2)
