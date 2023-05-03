@@ -62,7 +62,8 @@ class Functions():
 
         self.analog_value:int = analog_value
 
-        self.font_surface = self.font.render(self.function_determiner(), True, WHITE_FONT)
+        self.function_name = self.function_determiner()
+        self.font_surface = self.font.render(self.function_name, True, WHITE_FONT)
         self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
 
     def function_determiner(self):
@@ -376,9 +377,9 @@ def program_startup():
 
         list_of_arguments = []
 
-        for (line_number, function_name) in zip((range(1, 13)), function_list):
+        for (line_number, function) in zip((range(1, 13)), function_list):
             
-            argument = Arguments(line_number, function_name)
+            argument = Arguments(line_number, function.function_name)
             list_of_arguments.append(argument)
 
         button_list = buttons()
