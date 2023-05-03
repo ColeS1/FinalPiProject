@@ -345,6 +345,7 @@ def program_startup():
     RUNNING_ARGS = True
 
     argument_counter = 0
+    memory_of_args = []
 
     while (RUNNING_ARGS):
 
@@ -383,7 +384,15 @@ def program_startup():
             list_of_arguments.append(argument)
 
         button_list = buttons()
-        list_of_arguments[argument_counter].string_of_arguments_determiner(button_list)
+
+        memory_of_args.append(list_of_arguments[argument_counter].string_of_arguments_determiner(button_list))
+
+        i = 0
+
+        while i < len(memory_of_args):
+
+            list_of_arguments[i] = list_of_arguments[argument_counter].string_of_arguments_determiner(button_list)
+            i += 1
 
         for arguments in list_of_arguments:
 
