@@ -127,7 +127,7 @@ class Arguments():
 
         self.string = "No Arguments"
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
-        self.rect = pygame.Rect((600, self.height, Arguments.WIDTH, Arguments.HEIGHT))
+        self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
 
 
     
@@ -336,7 +336,7 @@ def program_startup():
 
             font_surface = FONT.render(no_arguments, True, WHITE_FONT)
 
-            rect = pygame.Rect((599, y_location, Arguments.WIDTH, Arguments.HEIGHT))
+            rect = pygame.Rect((600, y_location, Arguments.WIDTH, Arguments.HEIGHT))
             rect_centered = font_surface.get_rect(center=rect.center)
             
             pygame.draw.rect(screen, GREY, rect)
