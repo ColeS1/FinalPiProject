@@ -387,13 +387,14 @@ def program_startup():
 
         memory_of_args.append(list_of_arguments[argument_counter].string_of_arguments_determiner(button_list))
 
-        i = 0
+        f = 0
 
-        while i < len(memory_of_args):
+        while f < len(memory_of_args):
 
-            list_of_arguments[i] = list_of_arguments[argument_counter].string_of_arguments_determiner(button_list)
-            i += 1
+            list_of_arguments[f] = list_of_arguments[f].string_of_arguments_determiner(button_list)
+            f += 1
 
+        print(list_of_arguments)
         for arguments in list_of_arguments:
 
             print(arguments.string_of_arguments)
