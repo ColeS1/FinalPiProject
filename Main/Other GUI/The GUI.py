@@ -3,6 +3,8 @@ from testingserial import serial_monitor
 import pyttsx3
 from CONSTANTS import *
 from Buttons import *
+from time import sleep
+import RPi.GPIO as GPIO
 
 class Line():
     HEIGHT = 50
@@ -334,6 +336,7 @@ def program_startup():
             engine.runAndWait()
 
             RUNNING = False
+            sleep
             
         pygame.display.flip()
 
