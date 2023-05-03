@@ -393,17 +393,13 @@ def program_startup():
 
             list_of_arguments[f] = memory_of_args[f]
             f += 1
+
         
-        print(list_of_arguments)
-
-        for j in range(len(list_of_arguments)):
-
-            list_of_arguments[j] = list_of_arguments[j].string_of_arguments_determiner(button_list)
-
-            
-        print(list_of_arguments)
+        
         for arguments in list_of_arguments:
 
+            if list_of_arguments.index(arguments) == argument_counter:
+                argument.string_of_arguments_determiner(button_list)
                         
             pygame.draw.rect(screen, GREY, arguments.rect)
             screen.blit(arguments.font_surface, arguments.rect_centered)
