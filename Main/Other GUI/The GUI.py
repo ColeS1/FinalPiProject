@@ -263,13 +263,13 @@ from pygame.locals import (
     K_SPACE,
 )
 
-buttons = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
+button = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
 
 placeholder_arguments = ["No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments"]
 
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(buttons, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+GPIO.setup(button, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
 
 
@@ -336,13 +336,19 @@ def program_startup():
             engine.runAndWait()
 
             RUNNING = False
-            sleep
+            sleep(0.2)
             
         pygame.display.flip()
 
     RUNNING_ARGS = True
 
     while (RUNNING_ARGS):
+
+        for event in pygame.event.get():
+            if (event.type == KEYDOWN and event.key == K_ESCAPE):
+                RUNNING = False
+            elif (event.type == QUIT):
+                RUNNING = False
 
         for i in header_list:
 
@@ -382,6 +388,7 @@ def program_startup():
 
                     list_of_arguments[line_number - 1] = argument
 
+        pygame.display.flip()
 
 
 program_startup()
