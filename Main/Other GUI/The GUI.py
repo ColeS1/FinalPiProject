@@ -458,14 +458,15 @@ def program_startup():
 
             WRONG = True
             while WRONG == True:
+                button = buttons()
 
-                if len(buttons()) == 1:
+                if len(button) == 1:
 
-                    button_value = (buttons())[0]
+                    button_value = button[0]
                     WRONG = False
 
-                elif len(buttons()) == 2:
-                    button_value = (buttons())[0] + (buttons())[1]
+                elif len(button) == 2:
+                    button_value = button[0] + button[1]
                     WRONG = False
 
                 else:
@@ -485,7 +486,7 @@ def program_startup():
                 else: 
 
                     engine = pyttsx3.init()
-                    engine.say(f"Line {button_value} has a {function_list[button_value - 1].function_name} block and its arguments are {list_of_arguments[button_value - 1].string}")
+                    engine.say(f"Line {button_value} has a {function_list[int(button_value) - 1].function_name} block and its arguments are {list_of_arguments[int(button_value) - 1].string}")
                     engine.runAndWait()
                     WRONG = False
 
