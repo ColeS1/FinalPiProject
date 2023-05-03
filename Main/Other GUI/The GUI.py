@@ -451,22 +451,16 @@ def program_startup():
 
         if GPIO.input(23) == True:
 
-            engine = pyttsx3.init()
-            engine.say("Reading values... press any line number to read")
-            engine.runAndWait()
-            sleep(0.2)
-
-
             WRONG = True
             while WRONG == True:
 
                 if len(buttons()) == 1:
 
-                    button_value = (buttons())[0]
+                    button_value = (buttons())[1]
                     WRONG = False
 
-                elif len(buttons()) == 2:
-                    button_value = (buttons())[0] + (buttons())[1]
+                elif len(buttons()) == 3:
+                    button_value = (buttons())[1] + (buttons())[2]
                     WRONG = False
 
                 else:
@@ -491,7 +485,7 @@ def program_startup():
 
         elif GPIO.input(27) == True:
 
-            pass #FIGURE THIS OUT LATER WITH MAYBE A FUNCTION
+            pass #FIGURE THIS OUT LATER WITH MAYBE A FUNCTION ALONG WITH STUFF RIGHT ABOVE THIS
 
             
 
