@@ -127,7 +127,7 @@ class Arguments():
 
         self.string = "No Arguments"
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
-        self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
+        self.rect = pygame.Rect((600, self.height, Arguments.WIDTH, Arguments.HEIGHT))
 
 
     
@@ -340,10 +340,9 @@ def program_startup():
             RUNNING = False
             sleep(0.2)
 
-            
-        pygame.display.flip()
+        
 
-    RUNNING_ARGS = True
+        pygame.display.flip()
 
     argument_counter = 0
     memory_of_args = []
@@ -430,6 +429,13 @@ def program_startup():
             screen.blit(font_surface, centered)
         
         argument_counter += 1
+
+        RUN_BUTTON_NOT_PRESSED = True
+
+        while RUN_BUTTON_NOT_PRESSED:
+
+            pass
+
 
         pygame.display.flip()
 
