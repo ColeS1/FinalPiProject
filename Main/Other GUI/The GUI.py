@@ -123,13 +123,13 @@ class Arguments():
         self.argument_location_name = f"Argument {line_number}"
         self.line_number = f"Line {line_number}"
         self.function_name = function_name
-        self.string_of_arguments = "No Arguments"
+        self._string_of_arguments = "No Arguments"
 
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
         self.rect = pygame.Rect((500, self.height, Arguments.WIDTH, Arguments.HEIGHT))
         self.font = FONT
 
-        self.font_surface = self.font.render(self.string_of_arguments, True, WHITE_FONT)
+        self.font_surface = self.font.render(self._string_of_arguments, True, WHITE_FONT)
         self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
 
     
@@ -142,11 +142,11 @@ class Arguments():
 
                     if self.function_name == "For Loop":
 
-                        self.string_of_arguments = "Repeat" + "".join(list_of_arguments) + "times"
+                        self._string_of_arguments = "Repeat" + "".join(list_of_arguments) + "times"
 
                     else:
 
-                        self.string_of_arguments = "".join(list_of_arguments) + "seconds"
+                        self._string_of_arguments = "".join(list_of_arguments) + "seconds"
                     
 
                 else: 
@@ -155,7 +155,7 @@ class Arguments():
                     VALUE_TOO_HIGH = f"Error on {self.line_number}. Numbers cannot exceed must stay between 0 and 99. Erasing all arguments..."
                     engine.say(VALUE_TOO_HIGH)
                     engine.runAndWait()
-                    self.string_of_arguments = "Error"
+                    self._string_of_arguments = "Error"
                     
 
 
@@ -165,7 +165,7 @@ class Arguments():
                 WRONG_ARGUMENT = f"Error on {self.line_number}. Please put in only numbers for {self.function_arguments}. Erasing all arguments..."
                 engine.say(WRONG_ARGUMENT)
                 engine.runAndWait()
-                self.string_of_arguments = "Error"
+                self._string_of_arguments = "Error"
                 
 
         elif self.function_name == "While Loop" or self.function_name == "If":
@@ -176,7 +176,7 @@ class Arguments():
                 TOO_MANY_ARGUMENTS = f"Error on {self.line_number}. Too many arguments entered for {self.function_name}. Erasing all arguments..."
                 engine.say(TOO_MANY_ARGUMENTS)
                 engine.runAndWait()
-                self.string_of_arguments = "Error"
+                self._string_of_arguments = "Error"
                 
 
             elif len(list_of_arguments) in range(3, 5):
@@ -186,7 +186,7 @@ class Arguments():
                     try:
                         
                         if list_of_arguments[0] == "Ping" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10):
-                            self.string_of_arguments = " ".join(list_of_arguments) + "cm"
+                            self._string_of_arguments = " ".join(list_of_arguments) + "cm"
 
                         else:
 
@@ -194,7 +194,7 @@ class Arguments():
                             INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
                             engine.runAndWait()
-                            self.string_of_arguments = "Error"
+                            self._string_of_arguments = "Error"
                             
                             
 
@@ -204,7 +204,7 @@ class Arguments():
                         NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
                         engine.say(NUM_NOT_NUM)
                         engine.runAndWait()
-                        self.string_of_arguments = "Error"
+                        self._string_of_arguments = "Error"
                         
 
                 elif len(list_of_arguments) == 4:
@@ -213,7 +213,7 @@ class Arguments():
                         
                         if list_of_arguments[0] == "Ping" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10) and int(list_of_arguments[3] in range(0, 10)):
 
-                            self.string_of_arguments = list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
+                            self._string_of_arguments = list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
 
                         else:
 
@@ -221,7 +221,7 @@ class Arguments():
                             INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
                             engine.runAndWait()
-                            self.string_of_arguments = "Error"
+                            self._string_of_arguments = "Error"
                             
 
                     except ValueError:
@@ -230,10 +230,10 @@ class Arguments():
                         NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
                         engine.say(NUM_NOT_NUM)
                         engine.runAndWait()
-                        self.string_of_arguments = "Error"
+                        self._string_of_arguments = "Error"
 
         elif self.function_name == "None": 
-            self.string_of_arguments = "No Arguments"
+            self._string_of_arguments = "No Arguments"
             
 
 
@@ -337,6 +337,7 @@ def program_startup():
 
             RUNNING = False
             sleep(0.2)
+
             
         pygame.display.flip()
 
@@ -372,8 +373,6 @@ def program_startup():
             pygame.draw.rect(screen, GREY, functions.rect)
             screen.blit(functions.font_surface, functions.rect_centered)
 
-        
-        INVALID_ARGUMENT = True
 
         list_of_arguments = []
 
@@ -386,6 +385,8 @@ def program_startup():
         list_of_arguments[argument_counter].string_of_arguments_determiner(button_list)
 
         for arguments in list_of_arguments:
+
+            print(arguments.string_of_arguments)
             
             pygame.draw.rect(screen, GREY, arguments.rect)
             screen.blit(arguments.font_surface, arguments.rect_centered)
