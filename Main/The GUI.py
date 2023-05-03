@@ -447,6 +447,8 @@ def program_startup():
     engine.say("Press read, then press a line number if you would like to hear the arguments of the block. Press Run if you are ready for your program to start")
     engine.runAndWait()
 
+
+    line_function_argument_list = []
     while RUN_NOT_PRESSED:
 
         if GPIO.input(23) == True:
@@ -491,8 +493,12 @@ def program_startup():
 
         elif GPIO.input(27) == True:
 
-            pass #FIGURE THIS OUT LATER WITH MAYBE A FUNCTION ALONG WITH STUFF RIGHT ABOVE THIS
+            for (line_numbers, function_values, argument_values) in zip(line_list, function_list, list_of_arguments):
 
+                list_of_values = [line_numbers.name, function_values.function_name, argument_values.string]
+                line_function_argument_list.append(list_of_values)
+
+            print(line_function_argument_list)
             
 
 
