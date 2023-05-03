@@ -487,6 +487,7 @@ def program_startup():
                     engine = pyttsx3.init()
                     engine.say(f"Line {button_value} has a {function_list[button_value - 1].function_name} block and its arguments are {list_of_arguments[button_value - 1].string}")
                     engine.runAndWait()
+                    WRONG = False
 
         elif GPIO.input(27) == True:
 
