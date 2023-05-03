@@ -2,6 +2,7 @@ import pygame
 from testingserial import serial_monitor
 import pyttsx3
 from CONSTANTS import *
+from Buttons import *
 
 class Line():
     HEIGHT = 50
@@ -355,10 +356,24 @@ def program_startup():
             pygame.draw.rect(screen, GREY, functions.rect)
             screen.blit(functions.font_surface, functions.rect_centered)
 
-        
+            list_of_arguments = ["No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments", "No Arguments"]
 
+        for (line_number, function_name) in zip(line_list, function_list):
 
+            INVALID_ARGUMENT = True
 
+            while INVALID_ARGUMENT:
+
+                argument = Arguments(line_number, function_name, buttons())
+
+                if argument.string_of_arguments == "No Argument":
+
+                    continue
+
+                else:
+
+                    list_of_arguments[line_number - 1] = argument
+                    
 
 
 program_startup()
