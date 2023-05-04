@@ -5,6 +5,7 @@ from CONSTANTS import *
 from Buttons import *
 from time import sleep
 import RPi.GPIO as GPIO
+from sender_radio import *
 
 class Line():
     HEIGHT = 50
@@ -62,6 +63,7 @@ class Functions():
 
         self.analog_value:int = analog_value
 
+
         self.function_name = self.function_determiner()
         self.font_surface = self.font.render(self.function_name, True, WHITE_FONT)
         self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
@@ -70,34 +72,42 @@ class Functions():
 
         if self.analog_value in range(173, 182):
 
+            self.radio_name = "f"
             return "Go Forward"
         
         elif self.analog_value in range(506, 520):
 
+            self.radio_name = "l"
             return "Turn Left"
         
         elif self.analog_value in range(147, 156):
 
+            self.radio_name = "w"
             return "While Loop"
         
         elif self.analog_value in range(833, 844):
 
+            self.radio_name = "r"
             return "Turn Right"
         
         elif self.analog_value in range(335, 343):
 
+            self.radio_name = "s"
             return "If"
         
         elif self.analog_value in range(72, 80):
 
+            self.radio_name = "o"
             return "For Loop"
         
         elif self.analog_value in range(86, 95):
 
+            self.radio_name = "e"
             return "Go Reverse"
         
         else:
 
+            self.radio_name = " "
             return "None"
         
 class Arguments():
@@ -140,12 +150,14 @@ class Arguments():
 
                     if self.function_name == "For Loop":
                         
-                        self.string = "Repeat" + "".join(list_of_arguments) + "times"
-                        return "Repeat" + "".join(list_of_arguments) + "times"
+                        self.string = "Repeat " + "".join(list_of_arguments) + " times"
+                        self.radio_name = "".join(list_of_arguments)
+                        return "Repeat " + "".join(list_of_arguments) + " times"
 
                     else:
                         
                         self.string = "".join(list_of_arguments) + " seconds"
+                        self.radio_name = "".join(list_of_arguments)
                         return "".join(list_of_arguments) + " seconds"
                     
 
@@ -187,6 +199,7 @@ class Arguments():
                         
                         if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10):
                             self.string = " ".join(list_of_arguments) + "cm"
+                            self.radio_name = "p" + list_of_arguments[1] + list_of_arguments[2]
                             return " ".join(list_of_arguments) + "cm"
 
                         else:
@@ -235,6 +248,7 @@ class Arguments():
 
         elif self.function_name == "None": 
             self.string = "No Arguments"
+            self.radio_name = " "
             return "No Arguments"
             
 
@@ -448,7 +462,7 @@ def program_startup():
     engine.runAndWait()
 
 
-    line_function_argument_list = []
+    function_argument_string = ""
     while RUN_NOT_PRESSED:
 
         if GPIO.input(23) == True:
@@ -494,10 +508,17 @@ def program_startup():
 
         elif GPIO.input(27) == True:
 
-            for (line_numbers, function_values, argument_values) in zip(line_list, function_list, list_of_arguments):
+            for (function_values, argument_values) in zip(function_list, list_of_arguments):
 
-                list_of_values = [line_numbers.name, function_values.function_name, argument_values.string]
-                line_function_argument_list.append(list_of_values)  #line_function_argument_list will have all of the values of the lines of code to evenually decode to send to micro:bit
+                string_of_values = function_values.radio_name + argument_values.radio_name 
+                function_argument_string += string_of_values
+
+            engine = pyttsx3.init()
+            engine.say("Code has begun running. Please wait for the upload process to complete.")
+            engine.runAndWait()
+            sleep(0.2)
+
+            radio_code(function_argument_string)
             
         elif GPIO.input(19) == True:
 
