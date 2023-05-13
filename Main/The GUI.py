@@ -496,13 +496,15 @@ def program_startup():
 
                 string_of_values = function_values.radio_name + argument_values.radio_name 
                 function_argument_string += string_of_values
+                radio = function_argument_string.strip() + " "
 
             engine = pyttsx3.init()
             engine.say("Code has begun running. Please wait for the upload process to complete.")
             engine.runAndWait()
             sleep(0.2)
 
-            radio_code(function_argument_string)
+            print(radio)
+            radio_code(radio)
             
         elif GPIO.input(19) == True:
 

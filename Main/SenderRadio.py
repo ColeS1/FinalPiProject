@@ -3,21 +3,15 @@ import pyttsx3
 
 def radio_code(string):
 
-    code = f"""
-    from microbit import *
+    code = f"""from microbit import *
 
-    import radio
+import radio
 
-    radio.on()
-    radio.config(channel = 7, group = 1)
+radio.on()
+radio.config(channel = 7, group = 1)
 
-    sleep(1000)
-
-    while True:
-        
-        radio.send({string})
-
-        sleep(2000)
+sleep(1000)
+radio.send("{string}")
     """
 
     with open("main.py", "w") as f:
