@@ -470,7 +470,7 @@ def program_startup():
                 button = buttons() #Returns the list of buttons pressed
                 try:
 
-                    if int("".join(button)) in range(0, 100):
+                    if int("".join(button)) in range(1, 13):
                         button_value = "".join(button)
                         WRONG = False
 
