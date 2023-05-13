@@ -1,5 +1,12 @@
 import RPi.GPIO as GPIO
 from time import sleep
+import pygame
+
+from pygame.locals import (
+    K_ESCAPE,
+    KEYDOWN,
+    QUIT
+)
 
 def buttons():
 
@@ -27,6 +34,13 @@ def buttons():
     RUNNING = True
 
     while RUNNING:
+
+        for event in pygame.event.get():
+
+            if (event.type == KEYDOWN and event.key == K_ESCAPE):
+                exit()
+            elif (event.type == QUIT):
+                exit()
         
         for i in pins:
             

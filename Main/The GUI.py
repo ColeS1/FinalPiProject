@@ -199,7 +199,7 @@ class Arguments():
             if len(list_of_arguments) not in range(3, 5): #Checks if there are more than 3 or 4 arguments (the only amount that should occur)
 
                 engine = pyttsx3.init() #If there are too many arguments, then the text to speech will say such
-                TOO_MANY_ARGUMENTS = f"Error on {self.line_number}. Too many arguments entered for {self.function_name}. Erasing all arguments..."
+                TOO_MANY_ARGUMENTS = f"Error on {self.line_number}. Too little or too many arguments entered for {self.function_name}. Erasing all arguments..."
                 engine.say(TOO_MANY_ARGUMENTS)
                 engine.runAndWait()
                 return "Error" #Returns Error to know later on that we need to ask for this again
