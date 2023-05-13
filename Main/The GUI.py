@@ -377,7 +377,7 @@ def program_startup():
             
         pygame.display.flip()
 
-    #START OF WHILE LOOP THAT GOES THROUGH ALL OF THE ARGUMENTS AND SETTING THEM
+    #START OF WHILE LOOP THAT GOES THROUGH ALL OF THE ARGUMENTS AND SETTING THEM -- The Functions will no longer be updated here
 
     argument_counter = 0 #Counter that keeps track of which argument we're on
 
@@ -390,47 +390,49 @@ def program_startup():
             elif (event.type == QUIT):
                 exit()
        
-        for arguments in list_of_arguments:
+        for arguments in list_of_arguments: #Goes through each of the argument objects
 
-            if list_of_arguments.index(arguments) == argument_counter:
+            if list_of_arguments.index(arguments) == argument_counter: #Checks which argument we're currently on
 
-                if arguments.function_name == "None":
+                if arguments.function_name == "None": #If there is no function there when the argument counter gets to it, then that means we don't change the arguments from "No Arguments"
                     continue
 
-                else:
+                else: #If there is a function then:
+
                     WRONG = True
+                    #This loop allows it to where if you put an invalid argument, then it will continuously keep telling you to put a valid one until a valid one is inputted
                     while WRONG:
                         
-                        engine = pyttsx3.init()
+                        engine = pyttsx3.init() #Says that we are on whichever line, and we are currently editing the arguments for whichever function
                         engine.say(f"Currently on Line {argument_counter + 1} for putting arguments onto {arguments.function_name} block.")
                         engine.runAndWait()
 
-                        string = arguments.string_of_arguments_determiner(buttons())
+                        string = arguments.string_of_arguments_determiner(buttons()) #Goes through the argument method that checks all inputs from the button function
 
-                        if string == "Error":
+                        if string == "Error": #Error means that the function returned an error and the text to speech just says to try again.
 
                             engine = pyttsx3.init()
                             engine.say(f"Try putting a valid argument on Line {argument_counter + 1} again.")
                             engine.runAndWait()
 
-                        else: 
+                        else:   #Otherwise we stop this loop
 
                             WRONG = False
 
             else:
-                string = arguments.string
+                string = arguments.string #Allows it to where the other arguments that are not being affected (because we are doing one at a time) will still be constantly refreshed.
 
-            font_surface = FONT.render(string, True, WHITE_FONT)
+            font_surface = FONT.render(string, True, WHITE_FONT)            #Rest of these things just draw the arguments
             centered = font_surface.get_rect(center=arguments.rect.center)
                         
             pygame.draw.rect(screen, GREY, arguments.rect)
-            screen.blit(font_surface, centered) #Pygame's way of saying to put this on the screen
+            screen.blit(font_surface, centered) #Pygame's way of saying to put this on the screen and show what the arguments are
         
         argument_counter += 1
 
         pygame.display.flip()
 
-    #START OF NEW WHILE LOOP, THIS IS WHERE THE READ AND RUN FUNCTIONALITY IS RUN
+
 
     RUN_NOT_PRESSED = True
 
@@ -440,6 +442,9 @@ def program_startup():
 
 
     function_argument_string = ""
+
+    #START OF NEW WHILE LOOP, THIS IS WHERE THE READ AND RUN FUNCTIONALITY IS RUN
+
     while RUN_NOT_PRESSED:
 
         for event in pygame.event.get():
@@ -449,46 +454,42 @@ def program_startup():
             elif (event.type == QUIT):
                 exit()
 
-        if GPIO.input(23) == True:
+        if GPIO.input(23) == True: #Checks if pin 23 is high (or Read), if so:
 
-            engine = pyttsx3.init()
+            engine = pyttsx3.init() #Text to speech says we are in reading mode
             engine.say("Reading lines, please select a line number to read its block and arguments")
             engine.runAndWait()
             sleep(0.2)
 
             WRONG = True
+
+            #This loop ensures that if there is an invalid input then it wil keep running until there is a valid one put in for reading a line
+
             while WRONG == True:
-                button = buttons()
 
-                if len(button) == 1:
+                button = buttons() #Returns the list of buttons pressed
+                try:
 
-                    button_value = button[0]
-                    WRONG = False
+                    if int("".join(button)) in range(0, 100):
+                        button_value = "".join(button)
+                        WRONG = False
 
-                elif len(button) == 2:
-                    button_value = button[0] + button[1]
-                    WRONG = False
+                    else:
 
-                else:
+                            engine = pyttsx3.init()
+                            engine.say("Invalid input, try putting in a number between 1 and 12.")
+                            engine.runAndWait()
 
-                        engine = pyttsx3.init()
-                        engine.say("Invalid input, try putting in a number between 1 and 12.")
-                        engine.runAndWait()
-
-            WRONG = True
-            while WRONG:
-                if int(button_value) not in range(1, 13):
-                        
-                    engine = pyttsx3.init()
-                    engine.say("That is not a valid line number. Try again.")
-                    engine.runAndWait()
-
-                else: 
+                except ValueError:
 
                     engine = pyttsx3.init()
-                    engine.say(f"Line {button_value} has a {function_list[int(button_value) - 1].function_name} block and its arguments are {list_of_arguments[int(button_value) - 1].string}")
+                    engine.say("Invalid input, only use numbers to signify the line number.")
                     engine.runAndWait()
-                    WRONG = False
+
+
+            engine = pyttsx3.init()
+            engine.say(f"Line {button_value} has a {function_list[int(button_value) - 1].function_name} block and its arguments are {list_of_arguments[int(button_value) - 1].string}")
+            engine.runAndWait()
 
         elif GPIO.input(27) == True:
 
