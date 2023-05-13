@@ -145,6 +145,7 @@ class Arguments():
         self.line_number = f"Line {line_number}" #Needed for error determining later on. 
         self.function_name = function_name #Takes in the function name to use later on in error determining.
 
+        self.radio_name = " "
         self.string = "No Arguments" #Sets the default arguments to "No arguments" and will stay that way until changed within the string_of_arguments_determiner function
 
         self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name] #Similar to the other two blocks and sets the height of where the block will be based off of the location
@@ -388,26 +389,6 @@ def program_startup():
                 exit()
             elif (event.type == QUIT):
                 exit()
-
-        for i in header_list: #Draws the headers (doesn't change anymore)
-
-            font_surface = FONT.render(i, True, WHITE_FONT)
-
-            rect = pygame.Rect((header_dict[i], 0, Line.WIDTH, Line.HEIGHT))
-            rect_centered = font_surface.get_rect(center=rect.center)
-
-            pygame.draw.rect(screen, GREY, rect)
-            screen.blit(font_surface, rect_centered) #Pygame's way of saying to put this on the screen
-
-        for lines in line_list: #Draws the lines (doesn't change anymore)
-
-            pygame.draw.rect(screen, GREY, lines.rect)
-            screen.blit(lines.font_surface, lines.rect_centered) #Pygame's way of saying to put this on the screen
-
-        for functions in function_list: #Draws the lines (doesn't change functions anymore)
-        
-            pygame.draw.rect(screen, GREY, functions.rect)
-            screen.blit(functions.font_surface, functions.rect_centered) #Pygame's way of saying to put this on the screen
        
         for arguments in list_of_arguments:
 
