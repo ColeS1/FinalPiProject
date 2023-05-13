@@ -470,57 +470,60 @@ def program_startup():
                 button = buttons() #Returns the list of buttons pressed
                 try:
 
-                    if int("".join(button)) in range(1, 13):
-                        button_value = "".join(button)
+                    if int("".join(button)) in range(1, 13): #Checks if it is an integer and if that integer is within 1-12
+                        button_value = "".join(button) #If so then the button value is set to the string version and this will break the loop
                         WRONG = False
 
-                    else:
+                    else: #If it isn't within the range then it will say invalid input and make you put a valid input in
 
                             engine = pyttsx3.init()
                             engine.say("Invalid input, try putting in a number between 1 and 12.")
                             engine.runAndWait()
 
-                except ValueError:
+                except ValueError: #If we don't have an integer then it will say that you can only use numbers
 
                     engine = pyttsx3.init()
                     engine.say("Invalid input, only use numbers to signify the line number.")
                     engine.runAndWait()
 
-
+            #The code to actually say what is on the line you specified
             engine = pyttsx3.init()
             engine.say(f"Line {button_value} has a {function_list[int(button_value) - 1].function_name} block and its arguments are {list_of_arguments[int(button_value) - 1].string}")
             engine.runAndWait()
 
-        elif GPIO.input(27) == True:
+        elif GPIO.input(27) == True: #Checks if pin 27 (Run) is pressed
 
-            for (function_values, argument_values) in zip(function_list, list_of_arguments):
+            for (function_values, argument_values) in zip(function_list, list_of_arguments): #If so, then we iterate through both lists to get the radio values for each of these
 
                 string_of_values = function_values.radio_name + argument_values.radio_name 
                 function_argument_string += string_of_values
-                radio = function_argument_string.strip() + " "
+                radio = function_argument_string.strip() + " " #We strip these values to get rid of the spaces on the edges that may cause a problem with the program, then add a " "
+                                                               #of any issues
 
-            engine = pyttsx3.init()
+            engine = pyttsx3.init() #Says that the code is sending
             engine.say("Code has begun running. Please wait for the upload process to complete.")
             engine.runAndWait()
             sleep(0.2)
 
-            print(radio)
-            radio_code(radio)
+            radio_code(radio) #Radio function sends the program over to the micro:bit sender
             
-        elif GPIO.input(19) == True:
+        #This is more of a secret thing for us to use if we want because this was just on display. Because we'd need to have something that would restart the code in the instance
+        #That we had new judges, then we would do this combination in order to restart to the very beginning of the code
 
-            engine = pyttsx3.init()
+        elif GPIO.input(19) == True: #Checks if pin 19 is high (Dist)
+
+            engine = pyttsx3.init() #Audible response asking if we are sure we want to do this
             engine.say("Are you sure?")
             engine.runAndWait()
             sleep(0.2)
 
-            secret_to_restart = ["1", "2", "3", "4"]
+            secret_to_restart = ["1", "2", "3", "4"] #Combination that is needed to be pressed in order to restart the code
 
-            secret_list = buttons()
+            secret_list = buttons() #Gets the list of buttons pressed
 
-            if secret_list == secret_to_restart:
+            if secret_list == secret_to_restart: #If the combination we give matches with the secret code, then the function will restart and we can start over again.
 
-                engine = pyttsx3.init()
+                engine = pyttsx3.init() #Response to say we are restarting
                 engine.say("Restarting...")
                 engine.runAndWait()
                 sleep(0.2)
@@ -529,4 +532,4 @@ def program_startup():
 
 
 
-program_startup()
+program_startup() #Bruh if you read this please just give us an A. Also this just starts the program up to begin.
