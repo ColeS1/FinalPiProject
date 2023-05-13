@@ -1,16 +1,16 @@
 import pygame
-from testingserial import serial_monitor
+from SerialMonitor import *
 import pyttsx3
 from CONSTANTS import *
 from Buttons import *
 from time import sleep
 import RPi.GPIO as GPIO
-from sender_radio import *
+from SenderRadio import *
 
 class Line():
-    HEIGHT = 50
+    HEIGHT = 50     #Set dimensions for the Line block (With Line 1, 2, and so on)
     WIDTH = 300
-    LINE_HEIGHTS = {
+    LINE_HEIGHTS = {  #Dictionary of Line 1 - Line 12 string (names) that go with a number (Y value)
                     "Line 1": 50,
                     "Line 2": 100,
                     "Line 3": 150,
@@ -25,19 +25,21 @@ class Line():
                     "Line 12": 600
                     }
     
-    def __init__(self, number:int): #Takes in number to assign the name of it
-        
+    def __init__(self, number:int): #Takes in number to assign the name of the Line block
+        """Takes in a number to instantiate a line"""
         self.name = f"Line {number}"
-        self.height = Line.LINE_HEIGHTS[self.name]
+        self.height = Line.LINE_HEIGHTS[self.name]  #Acesses the dictionary and assigns where the height would be
+
         self.rect = pygame.Rect((0, self.height, Line.WIDTH, Line.HEIGHT))
-        self.font = FONT
-        self.font_surface = self.font.render(self.name, True, WHITE_FONT)
-        self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
+
+        self.font_surface = FONT.render(self.name, True, WHITE_FONT)   #Pygame to render the font
+
+        self.rect_centered = self.font_surface.get_rect(center=self.rect.center)    #Centers the font surface within the rectangle
 
 class Functions():
-    HEIGHT = 50
+    HEIGHT = 50     #Set dimensions for the Function block (With While Loop, Forward, and so on...)
     WIDTH = 300
-    FUNCTION_HEIGHTS = {
+    FUNCTION_HEIGHTS = {      #Dictionary of Function 1 - Function 12 string (locations) that go with a number (Y value)
                     "Function 1": 50,
                     "Function 2": 100,
                     "Function 3": 150,
@@ -56,19 +58,24 @@ class Functions():
     
     def __init__(self, line_number: int, analog_value: int):
 
-        self.function_location_name:str = f"Function {line_number}"
-        self.height = Functions.FUNCTION_HEIGHTS[self.function_location_name]
-        self.rect = pygame.Rect((300, self.height, Functions.WIDTH, Functions.HEIGHT))
-        self.font = FONT
+        """Takes in a number to determine which function block is actually being acted on"""
 
-        self.analog_value:int = analog_value
+        self.function_location_name:str = f"Function {line_number}" #Assigns a line number to the function
+        self.height = Functions.FUNCTION_HEIGHTS[self.function_location_name] #Assigns the height of the block according to which function we are instantiating
+
+        self.rect = pygame.Rect((300, self.height, Functions.WIDTH, Functions.HEIGHT)) #Makes a rectangle with the given specfications of a Function block
+
+        self.analog_value:int = analog_value #Assigns an analog value to the function
 
 
-        self.function_name = self.function_determiner()
-        self.font_surface = self.font.render(self.function_name, True, WHITE_FONT)
-        self.rect_centered = self.font_surface.get_rect(center=self.rect.center)
+        self.function_name = self.function_determiner() #Returns what the name of the function is based the function_determiner function
+
+        self.font_surface = FONT.render(self.function_name, True, WHITE_FONT) #Similar font set up as the line block
+        self.rect_centered = self.font_surface.get_rect(center=self.rect.center) #Similar font setup to center within the rectangle
 
     def function_determiner(self):
+        
+        """Uses the assigned analog value and returns what function it is along with the radio letter associated with it"""
 
         if self.analog_value in range(173, 182):
 
@@ -112,9 +119,10 @@ class Functions():
         
 class Arguments():
 
-    HEIGHT = 50
+    HEIGHT = 50 #Dimensions of argument blocks
     WIDTH = 300
-    ARGUMENT_HEIGHTS = {
+
+    ARGUMENT_HEIGHTS = { #Dictionary of Arguments 1 - Arguments 12 string (locations) that go with a number (Y value)
                     "Argument 1": 50,
                     "Argument 2": 100,
                     "Argument 3": 150,
@@ -131,122 +139,131 @@ class Arguments():
 
     def __init__ (self, line_number, function_name):
 
-        self.argument_location_name = f"Argument {line_number}"
-        self.line_number = f"Line {line_number}"
-        self.function_name = function_name
+        """Takes in a line number to determine the argument location and what the function is"""
 
-        self.string = "No Arguments"
-        self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name]
-        self.rect = pygame.Rect((600, self.height, Arguments.WIDTH, Arguments.HEIGHT))
+        self.argument_location_name = f"Argument {line_number}"
+        self.line_number = f"Line {line_number}" #Needed for error determining later on. 
+        self.function_name = function_name #Takes in the function name to use later on in error determining.
+
+        self.string = "No Arguments" #Sets the default arguments to "No arguments" and will stay that way until changed within the string_of_arguments_determiner function
+
+        self.height = Arguments.ARGUMENT_HEIGHTS[self.argument_location_name] #Similar to the other two blocks and sets the height of where the block will be based off of the location
+        self.rect = pygame.Rect((600, self.height, Arguments.WIDTH, Arguments.HEIGHT)) #Similar to the other two blocks where it sets the size and location
 
 
     
     def string_of_arguments_determiner(self, list_of_arguments):
 
+        """Sets the information of what will be displayed in the arguments column based on the function name, and handles error handling (along with text to speech to say what is happening)"""
+
+        #Checks if the function is any of the movement functions. If it is, then the user should put in an amount of seconds above 0 or below 100. 
         if self.function_name == "Go Forward" or self.function_name == "Turn Left" or self.function_name == "Turn Right" or self.function_name == "Go Reverse" or self.function_name == "For Loop":
             try:
 
-                if int("".join(list_of_arguments)) in range(0, 100):
+                if int("".join(list_of_arguments)) in range(0, 100): #Checks if the arguments set in (when joined together and typecasted into an integer) are from 0 to 99 seconds
 
-                    if self.function_name == "For Loop":
+                    if self.function_name == "For Loop": #Checks if the function is specfically a for loop because the movement blocks and for loops have the same types of arguments (0 - 99)
                         
-                        self.string = "Repeat " + "".join(list_of_arguments) + " times"
-                        self.radio_name = "".join(list_of_arguments)
-                        return "Repeat " + "".join(list_of_arguments) + " times"
+                        self.string = "Repeat " + "".join(list_of_arguments) + " times" 
+                        self.radio_name = "".join(list_of_arguments) #Sets the number as the representation of what is sent to the radio
+                        return self.string #Returns a different string value to output because it is a for loop
 
                     else:
                         
                         self.string = "".join(list_of_arguments) + " seconds"
-                        self.radio_name = "".join(list_of_arguments)
-                        return "".join(list_of_arguments) + " seconds"
+                        self.radio_name = "".join(list_of_arguments) #Sets the number as the representation of what is sent to the radio
+                        return self.string #Else it'll return the integer with seconds at the end
                     
 
                 else: 
                     
-                    engine = pyttsx3.init()
+                    engine = pyttsx3.init() #If the number is not within the range, then it will show an error that the number is not between 0 and 99
                     VALUE_TOO_HIGH = f"Error on {self.line_number}. Numbers cannot exceed must stay between 0 and 99. Erasing all arguments..."
                     engine.say(VALUE_TOO_HIGH)
                     engine.runAndWait()
-                    return "Error"
+                    return "Error" #Returns Error to know later on that we need to ask for this again
                     
 
 
-            except ValueError:
+            except ValueError: #Uses the except handle for a ValueError incase the user attempts to enter anything but an integer
 
-                engine = pyttsx3.init()
+                engine = pyttsx3.init() #Text to speech: says that only numbers can be used and not anything else
                 WRONG_ARGUMENT = f"Error on {self.line_number}. Please put in only numbers for {self.function_name} blocks. Erasing all arguments..."
                 engine.say(WRONG_ARGUMENT)
                 engine.runAndWait()
-                return "Error"
+                return "Error" #Returns Error to know later on that we need to ask for this again
                 
-
+        #Checks if the function is a while loop or a if statement, if it is, then it'll check the arguments.
         elif self.function_name == "While Loop" or self.function_name == "If":
 
-            if len(list_of_arguments) not in range(3, 5):
+            if len(list_of_arguments) not in range(3, 5): #Checks if there are more than 3 or 4 arguments (the only amount that should occur)
 
-                engine = pyttsx3.init()
+                engine = pyttsx3.init() #If there are too many arguments, then the text to speech will say such
                 TOO_MANY_ARGUMENTS = f"Error on {self.line_number}. Too many arguments entered for {self.function_name}. Erasing all arguments..."
                 engine.say(TOO_MANY_ARGUMENTS)
                 engine.runAndWait()
-                return "Error"
+                return "Error" #Returns Error to know later on that we need to ask for this again
                 
 
-            elif len(list_of_arguments) in range(3, 5):
+            elif len(list_of_arguments) in range(3, 5): #Checks if the list of arguments ARE 3 or 4
 
-                if len(list_of_arguments) == 3:
+                if len(list_of_arguments) == 3: #Checks if the amount of arguments are three
 
                     try:
                         
-                        if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10):
-                            self.string = " ".join(list_of_arguments) + "cm"
-                            self.radio_name = "p" + list_of_arguments[1] + list_of_arguments[2]
-                            return " ".join(list_of_arguments) + "cm"
+                        if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10): #Checks if the three arguments are valid, if they are:
 
-                        else:
-                            engine = pyttsx3.init()
+                            self.string = list_of_arguments[0] + " " + list_of_arguments[1] + " " + list_of_arguments[2] + "cm" #It'll set the radio to be what is given
+                            self.radio_name = "p" + list_of_arguments[1] + list_of_arguments[2] #It'll set the radio to be what is given
+                            return self.string
+
+                        else:   #If the arguments aren't valid (eles) then raise an error
+
+                            engine = pyttsx3.init() #Tells text to speech to say that there are invalid arguments
                             INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
                             engine.runAndWait()
-                            return "Error"
+                            return "Error" #Returns Error to know later on that we need to ask for this again
                             
                             
 
-                    except ValueError:
+                    except ValueError: #Uses the except handle for a ValueError incase the user attempts to enter anything but an integer for the distance to use
 
                         engine = pyttsx3.init()
                         NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
                         engine.say(NUM_NOT_NUM)
                         engine.runAndWait()
-                        return "Error"
+                        return "Error" #Returns Error to know later on that we need to ask for this again
                         
 
-                elif len(list_of_arguments) == 4:
+                elif len(list_of_arguments) == 4: #Checks if the amount of arguments given are four
 
                     try:
                         
-                        if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10) and (int(list_of_arguments[3]) in range(0, 10)):
+                        if list_of_arguments[0] == "Dist" and (list_of_arguments[1] == "<" or list_of_arguments[1] == ">") and int(list_of_arguments[2]) in range(0, 10) and (int(list_of_arguments[3]) in range(0, 10)): ##Checks if the four arguments are valid, if they are:
                             
-                            self.string = list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3])
-                            return list_of_arguments[0] + " " + list_of_arguments[1] + " " + (list_of_arguments[2] + list_of_arguments[3] + "cm")
+                            self.string = list_of_arguments[0] + " " + list_of_arguments[1] + " " + list_of_arguments[2] + list_of_arguments[3] + "cm" #It'll set the radio to be what is given
+                            self.radio_name = "p" + list_of_arguments[1] + list_of_arguments[2] + list_of_arguments[3] #It'll set the radio to be what is given
+                            return self.string
 
                         else:
 
-                            engine = pyttsx3.init()
+                            engine = pyttsx3.init() #Else the arguments are not valid, then an error is raised (text to speech)
                             INVALID_ARGUMENTS = f"Error on {self.line_number}. Invalid arguemnts for {self.function_name}. Erasing all arguments..."
                             engine.say(INVALID_ARGUMENTS)
                             engine.runAndWait()
-                            return "Error"
+                            return "Error" #Returns Error to know later on that we need to ask for this again
                             
 
-                    except ValueError:
+                    except ValueError: #Uses the except handle for a ValueError incase the user attempts to enter anything but an integer for the distance to use
 
                         engine = pyttsx3.init()
                         NUM_NOT_NUM = f"Error on {self.line_number}. Ping distance must be a number on {self.function_name} blocks. Erasing all arguments..."
                         engine.say(NUM_NOT_NUM)
                         engine.runAndWait()
-                        return "Error"
+                        return "Error" #Returns Error to know later on that we need to ask for this again
 
-        elif self.function_name == "None": 
+        elif self.function_name == "None": #If no functions are presented, then the arguments will stay at a constant "No Arguments". Radio will just be a space sent over.
             self.string = "No Arguments"
             self.radio_name = " "
             return "No Arguments"
@@ -254,106 +271,102 @@ class Arguments():
 
 
 pygame.init()
-line_list = []
-for i in range(1, 13):
 
-    line_list.append(Line(i))
 
 # Initialize pygame library and display
 
-screen = pygame.display.set_mode((900, 650))
-
-# Create a person object
-
-RUNNING = True 
+screen = pygame.display.set_mode((900, 650)) #Set the display to 900x650 (COULD HAVE BEEN CHANGED TO SOMETHING BIGGER, DIDNT HAVE TIME DUE TO HAVING TO CHANGE SOME OF THE DIMENSIONS WITHIN THE OBJECTS)
 
 from pygame.locals import (
-    RLEACCEL,
-    K_UP,
-    K_DOWN,
-    K_LEFT,
-    K_RIGHT,
     K_ESCAPE,
     KEYDOWN,
-    QUIT,
-    K_SPACE,
+    QUIT
 )
 
-button = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19]
+button: list[int] = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19] #GPIO Pins used for the keypad
+
+#Setup for the GPIO pins to be used
 
 GPIO.setmode(GPIO.BCM)
 
 GPIO.setup(button, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
 
+line_list: list[Line] = [] #Empty list to contain all of the Line objects and control them all at once with a for loop
+
+for i in range(1, 13):
+
+    line_list.append(Line(i)) #Appends a Line object with the given number to give the appropriate number
 
 def program_startup():
+
+    """Runs the entire program."""
+
+    #WHILE LOOP THAT CONTROLS DISPLAYING THE INFORMATION ON THE GUI (not much functionality apart from taking in data)
 
     RUNNING = True
 
     while (RUNNING):
-        # Look through all the events that happened in the last frame to see
-        # if the user tried to exit.
+
+        # Look through all the events that happened in the last frame to see if the user tries to exit.
         for event in pygame.event.get():
             if (event.type == KEYDOWN and event.key == K_ESCAPE):
                 RUNNING = False
             elif (event.type == QUIT):
                 RUNNING = False
 
-        list_of_analogs = serial_monitor()
-        function_list = []
+        list_of_analogs = serial_monitor() #Calls the serial monitor function to constantly check for what is on the rack.
+        function_list: list[Functions] = [] #List to keep track of the instantiated functions to be easily called upon
 
-        for (line_number, analog_values) in zip((range(1, 13)), (list_of_analogs)):
+        for (line_number, analog_values) in zip((range(1, 13)), (list_of_analogs)): #Iterates through a range of 1-12 and through the list of analogs from the rack at once.
 
-            function_list.append(Functions(line_number, analog_values))
+            function_list.append(Functions(line_number, analog_values)) #Going through all of these values (in the zip function) we can instantiate a Function with these values
 
-        header_list = ["Line #:", "Block Type:", "Arguments:"]
-        header_dict = {"Line #:": 0, "Block Type:": 300, "Arguments:": 600}
+        header_list = ["Line #:", "Block Type:", "Arguments:"]  #Headers For the Line numbers, Block Types, and Arguments
+        header_dict = {"Line #:": 0, "Block Type:": 300, "Arguments:": 600} #Dictionary that says where the headers will be along the X-axis
 
 
-        for i in header_list:
+        for i in header_list: #Renders all of the headers
 
-            font_surface = FONT.render(i, True, WHITE_FONT)
+            font_surface = FONT.render(i, True, WHITE_FONT) #Renders font surface with constant FONT
 
-            rect = pygame.Rect((header_dict[i], 0, Line.WIDTH, Line.HEIGHT))
-            rect_centered = font_surface.get_rect(center=rect.center)
+            rect = pygame.Rect((header_dict[i], 0, 300, 50)) #Creates a rect based on which header it is (dictionary being used and tells where for it to be).
+            rect_centered = font_surface.get_rect(center=rect.center) #Centers the font surface within the rectangle
 
-            pygame.draw.rect(screen, GREY, rect)
-            screen.blit(font_surface, rect_centered)
+            pygame.draw.rect(screen, GREY, rect) #Draws the rectangles
+            screen.blit(font_surface, rect_centered) #Pygame's way of saying to put this on the screen
         
         for lines in line_list:
 
-            pygame.draw.rect(screen, GREY, lines.rect)
-            screen.blit(lines.font_surface, lines.rect_centered)  # blit the text surface onto the rectangle
+            pygame.draw.rect(screen, GREY, lines.rect)  #Draws the line blocks on the screen
+            screen.blit(lines.font_surface, lines.rect_centered)  #Pygame's way of saying to put this on the screen and puts what line number it is
 
         for functions in function_list:
         
-            pygame.draw.rect(screen, GREY, functions.rect)
-            screen.blit(functions.font_surface, functions.rect_centered)  # blit the text surface onto the rectangle
+            pygame.draw.rect(screen, GREY, functions.rect)  #Draws the function blocks on the screen
+            screen.blit(functions.font_surface, functions.rect_centered)  #Pygame's way of saying to put this on the screen and puts the text of what the function is
 
-        list_of_arguments = []
+        list_of_arguments: list[Arguments] = [] #List to keep track of all of the instantiated arguments (basically just to put that there are "No Arguments" until the next while loop)
 
-        for (line_number, function) in zip((range(1, 13)), function_list):
+        for (line_number, function) in zip((range(1, 13)), function_list): #Goes through a range of 1-12 and the function list
             
-            argument = Arguments(line_number, function.function_name)
+            argument = Arguments(line_number, function.function_name) #Sets line number and finds the function name to create an argument
             list_of_arguments.append(argument)
 
         for arguments in list_of_arguments:
 
-            pygame.draw.rect(screen, GREY, arguments.rect)
+            pygame.draw.rect(screen, GREY, arguments.rect) #Draws the arguments
 
-            what_to_show = arguments.string
-
-            font_surface = FONT.render(what_to_show, True, WHITE_FONT)
-            centered = font_surface.get_rect(center=arguments.rect.center)
+            font_surface = FONT.render(arguments.string, True, WHITE_FONT) #Creates the font surface in the for loop (caused issues within the class, so I decided to go this route)
+            centered = font_surface.get_rect(center=arguments.rect.center) #Centered the text within the rectangle
 
             pygame.draw.rect(screen, GREY, arguments.rect)
-            screen.blit(font_surface, centered)
+            screen.blit(font_surface, centered) #Pygame's way of saying to put this on the screen and put the arguments within the block
 
-        if GPIO.input(12) == True:
+        if GPIO.input(12) == True: #Checks the state of pin 12 (aka Lock button), this ultimately breaks the while loop and continues the program to another while loop
 
             engine = pyttsx3.init()
-            LOCKED = "The rack is now locked"
+            LOCKED = "The rack is now locked" #The text to speech will say this
             engine.say(LOCKED)
             engine.runAndWait()
 
@@ -363,19 +376,22 @@ def program_startup():
             
         pygame.display.flip()
 
+    #START OF WHILE LOOP THAT GOES THROUGH ALL OF THE ARGUMENTS AND SETTING THEM
 
-    argument_counter = 0
-    memory_of_args = []
+    argument_counter = 0 #Counter that keeps track of which argument we're on
 
-    while argument_counter != 12:
+    memory_of_args = [] #This list serves the purpose of remembering each argument after each refresh of the screen. Without this, everything resets to "No Arguments" once the while loop iterates
+
+    while argument_counter != 12: #Ensures the entire list of arguments are accounted for when iterating
 
         for event in pygame.event.get():
-            if (event.type == KEYDOWN and event.key == K_ESCAPE):
-                RUNNING = False
-            elif (event.type == QUIT):
-                RUNNING = False
 
-        for i in header_list:
+            if (event.type == KEYDOWN and event.key == K_ESCAPE):
+                exit()
+            elif (event.type == QUIT):
+                exit()
+
+        for i in header_list: #Draws the headers (doesn't change anymore)
 
             font_surface = FONT.render(i, True, WHITE_FONT)
 
@@ -383,33 +399,21 @@ def program_startup():
             rect_centered = font_surface.get_rect(center=rect.center)
 
             pygame.draw.rect(screen, GREY, rect)
-            screen.blit(font_surface, rect_centered)
+            screen.blit(font_surface, rect_centered) #Pygame's way of saying to put this on the screen
 
-        for lines in line_list:
+        for lines in line_list: #Draws the lines (doesn't change anymore)
 
             pygame.draw.rect(screen, GREY, lines.rect)
-            screen.blit(lines.font_surface, lines.rect_centered)
+            screen.blit(lines.font_surface, lines.rect_centered) #Pygame's way of saying to put this on the screen
 
-        for functions in function_list:
+        for functions in function_list: #Draws the lines (doesn't change functions anymore)
         
             pygame.draw.rect(screen, GREY, functions.rect)
-            screen.blit(functions.font_surface, functions.rect_centered)
+            screen.blit(functions.font_surface, functions.rect_centered) #Pygame's way of saying to put this on the screen
 
-        for arguments in list_of_arguments:
+        # memory_of_args.append(list_of_arguments[argument_counter]) #Adds the Argument object to the list to remember
 
-            pygame.draw.rect(screen, GREY, arguments.rect)
-
-            what_to_show = arguments.string
-
-            font_surface = FONT.render(what_to_show, True, WHITE_FONT)
-            centered = font_surface.get_rect(center=arguments.rect.center)
-
-            pygame.draw.rect(screen, GREY, arguments.rect)
-            screen.blit(font_surface, centered)
-
-        memory_of_args.append(list_of_arguments[argument_counter])
-
-        f = 0
+        # f = 0
 
         while f < len(memory_of_args):
 
@@ -423,24 +427,25 @@ def program_startup():
                 if arguments.function_name == "None":
                     continue
 
-                WRONG = True
-                while WRONG:
-                    
-                    engine = pyttsx3.init()
-                    engine.say(f"Currently on Line {argument_counter + 1} for putting arguments onto {arguments.function_name} block.")
-                    engine.runAndWait()
-
-                    string = arguments.string_of_arguments_determiner(buttons())
-
-                    if string == "Error":
-
+                else:
+                    WRONG = True
+                    while WRONG:
+                        
                         engine = pyttsx3.init()
-                        engine.say(f"Try putting a valid argument on Line {argument_counter + 1} again.")
+                        engine.say(f"Currently on Line {argument_counter + 1} for putting arguments onto {arguments.function_name} block.")
                         engine.runAndWait()
 
-                    else: 
+                        string = arguments.string_of_arguments_determiner(buttons())
 
-                        WRONG = False
+                        if string == "Error":
+
+                            engine = pyttsx3.init()
+                            engine.say(f"Try putting a valid argument on Line {argument_counter + 1} again.")
+                            engine.runAndWait()
+
+                        else: 
+
+                            WRONG = False
 
             else:
                 string = arguments.string
@@ -449,11 +454,13 @@ def program_startup():
             centered = font_surface.get_rect(center=arguments.rect.center)
                         
             pygame.draw.rect(screen, GREY, arguments.rect)
-            screen.blit(font_surface, centered)
+            screen.blit(font_surface, centered) #Pygame's way of saying to put this on the screen
         
         argument_counter += 1
 
         pygame.display.flip()
+
+    #START OF NEW WHILE LOOP, THIS IS WHERE THE READ AND RUN FUNCTIONALITY IS RUN
 
     RUN_NOT_PRESSED = True
 
@@ -464,6 +471,13 @@ def program_startup():
 
     function_argument_string = ""
     while RUN_NOT_PRESSED:
+
+        for event in pygame.event.get():
+
+            if (event.type == KEYDOWN and event.key == K_ESCAPE):
+                exit()
+            elif (event.type == QUIT):
+                exit()
 
         if GPIO.input(23) == True:
 

@@ -1,5 +1,11 @@
 import serial
+import pygame
 
+from pygame.locals import (
+    K_ESCAPE,
+    KEYDOWN,
+    QUIT
+)
 
 def serial_monitor():
 
@@ -8,7 +14,14 @@ def serial_monitor():
 
     while True:
         try:
-            
+            for event in pygame.event.get():
+
+                if (event.type == KEYDOWN and event.key == K_ESCAPE):
+                    exit()
+                elif (event.type == QUIT):
+                    exit()
+
+
             data = ser.readline().decode().strip()
             data2 = ser2.readline().decode().strip()
 
