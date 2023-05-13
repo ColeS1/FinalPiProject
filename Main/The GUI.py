@@ -283,7 +283,7 @@ from pygame.locals import (
     QUIT
 )
 
-button: list[int] = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19] #GPIO Pins used for the keypad
+button: "list[int]" = [17, 16, 13, 12, 6, 5, 4, 27, 26, 25, 24, 23, 22, 21, 20, 19] #GPIO Pins used for the keypad
 
 #Setup for the GPIO pins to be used
 
@@ -292,7 +292,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(button, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
 
-line_list: list[Line] = [] #Empty list to contain all of the Line objects and control them all at once with a for loop
+line_list: "list[Line]" = [] #Empty list to contain all of the Line objects and control them all at once with a for loop
 
 for i in range(1, 13):
 
@@ -380,8 +380,6 @@ def program_startup():
 
     argument_counter = 0 #Counter that keeps track of which argument we're on
 
-    memory_of_args = [] #This list serves the purpose of remembering each argument after each refresh of the screen. Without this, everything resets to "No Arguments" once the while loop iterates
-
     while argument_counter != 12: #Ensures the entire list of arguments are accounted for when iterating
 
         for event in pygame.event.get():
@@ -410,15 +408,6 @@ def program_startup():
         
             pygame.draw.rect(screen, GREY, functions.rect)
             screen.blit(functions.font_surface, functions.rect_centered) #Pygame's way of saying to put this on the screen
-
-        # memory_of_args.append(list_of_arguments[argument_counter]) #Adds the Argument object to the list to remember
-
-        # f = 0
-
-        while f < len(memory_of_args):
-
-            list_of_arguments[f] = memory_of_args[f]
-            f += 1
        
         for arguments in list_of_arguments:
 
