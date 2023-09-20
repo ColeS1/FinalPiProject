@@ -532,4 +532,4 @@ def program_startup():
 
 
 
-program_startup() #Bruh if you read this please just give us an A. Also this just starts the program up to begin.
+program_startup()
